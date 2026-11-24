@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#701d30"><title>千喜萬福｜中華總會會員大會摸彩</title>
+<link rel="stylesheet" href="style.css"><script defer src="lottery.js"></script><script defer src="app.js"></script>
+</head><body>
+<header class="mast"><div class="brand"><span class="seal" aria-hidden="true">❀</span><div><strong>國際佛光會中華總會</strong><small>2026 會員大會</small></div></div>
+<nav aria-label="主導覽"><button data-view="stage" class="active">抽獎舞台</button><button data-view="settings">活動設定</button><button data-view="history">中獎紀錄</button></nav>
+<button class="outline project" id="project"><span aria-hidden="true">▣</span> 開啟投影</button></header>
+<main>
+<section id="stage">
+<div class="heading"><div><div class="kicker"><i></i> 2026 年度會員大會</div><h1>大會摸彩</h1></div><button class="outline music" id="music" aria-pressed="false">♫　背景音樂：關</button></div>
+<div class="layout"><article class="board"><div class="board-top"><span>會員大會摸彩</span><span id="round"></span></div>
+<canvas id="art" aria-hidden="true"></canvas>
+<div class="stage-body"><div class="ornament" aria-hidden="true">✧</div><h2 id="blessing">千喜萬福</h2><div class="prize-line" id="onPrize"></div>
+<div id="numbers" aria-live="polite"></div><div class="stage-status" id="stageStatus"></div>
+<div id="pages" hidden><button id="prev" aria-label="上一頁">‹</button><span id="pageText"></span><button id="next" aria-label="下一頁">›</button></div>
+<button class="gold" id="draw"><span aria-hidden="true">✧</span> 千喜萬福</button></div>
+<div class="board-foot"><span>國際佛光會中華總會</span><span>✦</span><span>2026 會員大會</span></div></article>
+<aside class="catalog"><div class="catalog-head"><div class="over">PRIZE LIST</div><h2>摸彩獎項</h2><span class="total">15 項</span></div><div id="prizes" role="group" aria-label="選擇本輪獎項"></div></aside></div>
+<div class="control"><div><span class="label">本輪獎項</span><strong id="current"></strong></div><label>本輪名額 <input type="number" id="batch" min="1" max="100000" value="1"></label><span id="balance"></span><button class="text-button" id="editPrize">設定本獎項</button></div>
+</section>
+<section id="settings" hidden><div class="heading"><div><div class="kicker"><i></i> 工作人員後台</div><h1>活動設定</h1></div></div>
+<div class="forms"><form id="poolForm" class="paper"><h2>參加摸彩號碼</h2><p>輸入實際發出的摸彩券號碼，可混用區間及個別號碼。例如 1-300, 305, 310。</p><label for="pool">有效號碼</label><textarea id="pool" rows="4" placeholder="請輸入本次實際參加的號碼"></textarea><p id="poolCount"></p><button class="solid">儲存號碼池</button></form>
+<form id="prizeForm" class="paper"><h2>獎項與抽法</h2><label for="pick">選擇編輯的獎項</label><select id="pick"></select>
+<div class="pair"><label>獎品名稱<input id="prizeName" required maxlength="100"></label><label>贊助者<input id="sponsor" required maxlength="50"></label></div>
+<label>總名額（填 0 表示待確認）<input id="quantity" type="number" min="0" max="100000" required></label><p id="note"></p>
+<label>抽獎方式<select id="mode"><option value="live">系統現場隨機抽出</option><option value="preset">後台預設號碼</option></select></label>
+<div id="presets" hidden><label for="queue">尚待開出的號碼（依輸入順序揭曉）</label><textarea rows="3" id="queue"></textarea><div class="pair generate"><label>隨機產生個數<input type="number" min="1" max="100000" value="1" id="generateCount"></label><button type="button" class="outline" id="generate">加入隨機號碼</button></div><p>儲存後即為此獎項預留。切回現場隨機並儲存會釋出剩餘預留號碼。</p></div>
+<button class="solid">儲存獎項設定</button></form></div></section>
+<section id="history" hidden><div class="heading"><div><div class="kicker"><i></i> 2026 年度會員大會</div><h1>中獎紀錄</h1></div><button class="outline" id="export">下載 CSV</button></div>
+<div class="paper"><p id="historyCount"></p><div id="rows"></div></div><details class="clear"><summary>彩排後清除紀錄</summary><p>清除所有中獎紀錄與預設號碼，保留獎項及參加號碼。請先下載留存。</p><button class="outline" id="reset">清除彩排紀錄與預設號碼</button></details></section>
+</main><button id="fullscreen" hidden>全螢幕投影</button><div role="status" id="notice" hidden></div>
+</body></html>
