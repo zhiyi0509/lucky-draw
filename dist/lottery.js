@@ -18,8 +18,9 @@ const Lottery = (() => {
     ["黃敏惠","全聯禮券",0,"份","總額 30,000 元"],
     ["朱唐妹","海能量水果清潔液＋環境清潔液禮盒",30,"份",""]
   ];
+  const defaultBrand={title:"國際佛光會中華總會",event:"2026 會員大會",logo:"",palette:"plum"};
   function initial() {
-    return {version:1, rev:0, poolText:"", pool:[], selected:0, batch:1, history:[], display:"ready",
+    return {brand:{...defaultBrand},version:1, rev:0, poolText:"", pool:[], selected:0, batch:1, history:[], display:"ready",
       prizes:catalog.map(([sponsor,name,qty,unit,note]) => ({sponsor,name,qty,unit,note,mode:"live",queue:[]}))};
   }
   function requireValue(ok, msg) { if (!ok) throw Error(msg); }
@@ -61,6 +62,12 @@ const Lottery = (() => {
     requireValue(protectedNumbers.every(n=>allowed.has(n)),"號碼池須保留已中獎及已預留的號碼。");
     s.pool=pool;s.poolText=text.trim();s.display="ready";
   }
+  function parseEndings(text) {
+    const parts=String(text??"").normalize("NFKC").trim().split(/[\s,、;]+/u).filter(Boolean);
+    requireValue(parts.length && parts.every(part=>/^\d$/.test(part)),
+      "請填寫 0 至 9 的個位數，多個數字以逗號或空格分隔，例如 1、5、0。");
+    return [...new Set(parts.map(Number))];
+  }
   function configure(s,id,draft) {
     const p=s.prizes[id], awarded=p.qty-remaining(s,id);
     requireValue(draft.name.trim() && draft.sponsor.trim(),"請填寫獎品及贊助者名稱。");
@@ -69,21 +76,71 @@ const Lottery = (() => {
     requireValue(queue.length<=draft.qty-awarded,"預設號碼數量超過剩餘獎項名額。");
     const free=new Set(available(s,id));
     requireValue(queue.every(n=>free.has(n)),"預設號碼須在有效號碼池內，且不能已中獎或被其他獎項預留。");
-    Object.assign(p,{name:draft.name.trim(),sponsor:draft.sponsor.trim(),qty:draft.qty,mode:draft.mode,queue});
+    const endings=draft.mode==="ending"?parseEndings(draft.endingText):[];
+    Object.assign(p,{name:draft.name.trim(),sponsor:draft.sponsor.trim(),qty:draft.qty,mode:draft.mode,queue,endings});
     s.display="ready";
   }
   function draw(s,now=Date.now()) {
     const id=s.selected,p=s.prizes[id],count=s.batch;
+    requireValue(p && !p.deleted,"請先新增並選擇獎項。");
     requireValue(s.pool.length,"請先在「活動設定」儲存參加摸彩的號碼。");
     requireValue(Number.isInteger(count)&&count>=1&&count<=remaining(s,id),"本輪名額超過可抽份數，請調整名額或選擇其他獎項。");
     let numbers;
     if(p.mode==="preset"){
       requireValue(p.queue.length>=count,"本獎項預設號碼不足，請至活動設定補齊或調整本輪名額。");
       numbers=p.queue.splice(0,count);
-    } else { numbers=sample(available(s),count); }
+    } else {
+      let candidates=available(s);
+      if(p.mode==="ending"){
+        const endings=new Set(p.endings);
+        candidates=candidates.filter(n=>endings.has(n%10));
+        requireValue(candidates.length>=count,"符合尾數規則且可抽的號碼剩 "+candidates.length+" 個，本輪需要 "+count+" 個。請調整名額或尾數。");
+      }
+      numbers=sample(candidates,count);
+    }
     const r={id,name:p.name,sponsor:p.sponsor,mode:p.mode,numbers,time:now,round:s.history.length+1};
+    if(p.mode==="ending")r.endings=[...p.endings];
     s.history.push(r);s.display="result";return r;
   }
-  return {initial,parseNumbers,remaining,available,sample,setPool,configure,draw};
+  function activeIds(s) {
+    return s.prizes.flatMap((p,id)=>p.deleted ? [] : [id]);
+  }
+  function savePrize(s,id,draft) {
+    if(id!==-1) {
+      requireValue(s.prizes[id] && !s.prizes[id].deleted,"此獎項已刪除。");
+      configure(s,id,draft);
+      return id;
+    }
+    const next=s.prizes.length;
+    const prizes=[...s.prizes,{qty:0,queue:[],unit:"份",note:""}];
+    configure({...s,prizes},next,draft);
+    s.prizes=prizes;
+    if(s.selected<0)s.selected=next;
+    s.display="ready";
+    return next;
+  }
+  function removePrize(s,id) {
+    const p=s.prizes[id];
+    requireValue(p && !p.deleted,"此獎項已刪除。");
+    // Keep the historical index stable, including after new prizes are added.
+    p.deleted=true;
+    p.queue=[];
+    if(s.selected===id) {
+      s.selected=activeIds(s)[0]??-1;
+      s.batch=1;
+    }
+    s.display="ready";
+  }
+  function drawRound(s,rev,count,now=Date.now()) {
+    requireValue(s.rev===rev,"場次已更新，請確認目前獎項後再開獎。");
+    requireValue(Number.isSafeInteger(count)&&count>0,"請在主控台填寫本輪名額。");
+    const next={...s,batch:count};
+    const result=draw(next,now);
+    s.batch=count;
+    s.display=next.display;
+    return result;
+  }
+  return {defaultBrand,initial,parseNumbers,remaining,available,sample,setPool,configure,draw,
+    activeIds,savePrize,removePrize,drawRound};
 })();
 if (typeof module!=="undefined") module.exports=Lottery;

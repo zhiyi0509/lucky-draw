@@ -36,3 +36,40 @@ test("號碼不足、空號碼池、無效批次、隨機預設無重號",()=>{
  for(const n of [0,-1,1.5]){s.batch=n;assert.throws(()=>L.draw(s));}
  const a=L.sample(s.pool,3);assert.equal(new Set(a).size,3);preset(s,0,a.join(","));s.batch=3;assert.deepEqual(L.draw(s).numbers,a);
 });
+
+test("新增與刪除獎項不改變歷史歸屬，未使用的預留號可以再抽",()=>{
+ const s=setup();preset(s,1,"17,18");s.selected=1;L.draw(s);
+ L.removePrize(s,1);
+ assert.ok(!L.activeIds(s).includes(1));assert.ok(L.available(s).includes(18));assert.ok(!L.available(s).includes(17));
+ const id=L.savePrize(s,-1,{name:"新獎項",sponsor:"大會",qty:2,mode:"preset",queueText:"18"});
+ assert.equal(id,15);assert.equal(s.history[0].name,"電視機");assert.equal(L.remaining(s,id),2);
+ L.savePrize(s,id,{name:"新禮盒",sponsor:"協會",qty:1,mode:"preset",queueText:"18"});s.selected=id;
+ assert.deepEqual(L.drawRound(s,s.rev,1).numbers,[18]);assert.equal(s.history.at(-1).name,"新禮盒");
+});
+test("可刪除最後一項後再新增；失敗的新增不留下空獎項",()=>{
+ const s=setup();for(const id of L.activeIds(s))L.removePrize(s,id);
+ assert.equal(s.selected,-1);assert.throws(()=>L.draw(s));
+ assert.throws(()=>L.savePrize(s,-1,{name:"",sponsor:"",qty:1,mode:"live"}));assert.equal(s.prizes.length,15);
+ const id=L.savePrize(s,-1,{name:"摸彩",sponsor:"大會",qty:1,mode:"live"});assert.equal(s.selected,id);
+});
+test("主控及投影的開獎請求共用輪次與名額檢查，300 號一次開出",()=>{
+ const s=setup();s.selected=7;const rev=s.rev;
+ const r=L.drawRound(s,rev,300);s.rev++;
+ assert.equal(r.numbers.length,300);assert.throws(()=>L.drawRound(s,rev,300));assert.equal(s.history.length,1);
+});
+test("尾數可含 0、多個數字及全形輸入，排除保留與歷史中獎號碼",()=>{
+ const s=L.initial();L.setPool(s,"1-30");preset(s,1,"20");
+ preset(s,2,"11");s.selected=2;L.draw(s);
+ const draft={name:"尾數獎",sponsor:"大會",qty:10,mode:"ending",endingText:"０、１，0"};
+ L.savePrize(s,0,draft);s.selected=0;s.batch=4;
+ const r=L.draw(s);assert.deepEqual([...r.numbers].sort((a,b)=>a-b),[1,10,21,30]);
+ assert.deepEqual(r.endings,[0,1]);assert.equal(r.mode,"ending");
+ L.savePrize(s,0,{...draft,endingText:"5"});assert.deepEqual(r.endings,[0,1]);
+});
+test("尾數條件不足與無效規則均不異動已儲存資料",()=>{
+ const s=setup();const draft={name:"尾數獎",sponsor:"大會",qty:100,mode:"ending",endingText:"0"};
+ L.setPool(s,"1-12");L.savePrize(s,0,draft);s.batch=2;
+ const before=JSON.stringify(s);assert.throws(()=>L.draw(s),/剩 1 個/);assert.equal(JSON.stringify(s),before);
+ for(const endingText of ["","10","-1","三",", ,"])assert.throws(()=>L.savePrize(s,0,{...draft,endingText}));
+ assert.equal(JSON.stringify(s),before);
+});

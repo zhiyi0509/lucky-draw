@@ -7,40 +7,71 @@
 :root{--wine:#79253e;--ink:#332925;--muted:#786e65;--line:#dfd8ca;--paper:#faf8f2;--gold:#f5d392;--serif:"Noto Serif TC","Songti TC","PMingLiU",serif;font-family:"DM Sans","Microsoft JhengHei",system-ui,sans-serif;color:var(--ink);background:var(--paper)}
 body{margin:0}button,input,select,textarea{font:inherit}button{cursor:pointer}button:disabled{opacity:.55;cursor:default}button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #ba843d;outline-offset:3px}
 .mast{min-height:84px;padding:12px max(4vw,20px);display:flex;gap:32px;align-items:center;background:#fffdf8;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:12px}.brand strong,.brand small{display:block}.brand strong{font-family:var(--serif);font-size:19px;letter-spacing:.07em}.brand small{color:var(--muted);font-size:13px;letter-spacing:.15em;margin-top:3px}.seal{display:grid;place-items:center;background:var(--wine);color:#f6daac;border:3px double #c49a77;border-radius:50%;width:49px;height:49px;font:42px/1 Georgia,serif}.mast nav{margin:auto;align-self:stretch;display:flex;gap:27px}.mast nav button{position:relative;background:none;border:0;color:var(--muted);padding:8px 3px}.mast nav button.active{color:var(--wine);font-weight:700}.mast nav button.active:after{position:absolute;content:"";height:2px;bottom:0;background:var(--wine);left:4px;right:4px}
-button.outline,.solid,.text-button{border-radius:8px;padding:9px 15px;font-weight:600}.outline{background:#fffcf6;color:var(--wine);border:1px solid #cbbba6}.solid{background:var(--wine);color:#fff;border:0}.text-button{background:none;border:0;color:var(--wine)}button:hover:enabled{filter:brightness(.95)}main{max-width:1570px;margin:auto;padding:32px 4vw 36px}.heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}.kicker,.over{color:#8c6444;letter-spacing:.13em;font-size:13px;font-weight:700}.kicker{display:flex;align-items:center;gap:10px}.kicker i{height:1px;width:26px;background:#a88454}h1,h2,p{margin:0}h1,h2{font-family:var(--serif)}h1{font-size:clamp(31px,3vw,45px);letter-spacing:.065em;line-height:1.35;margin-top:4px}.layout{display:grid;grid-template-columns:minmax(0,2.45fr) minmax(260px,1fr);gap:22px}.board{position:relative;isolation:isolate;overflow:hidden;min-height:490px;display:flex;flex-direction:column;align-items:stretch;border-radius:15px;color:#fae9c5;background:radial-gradient(ellipse at 51% 39%,#922f43 0%,#781d36 53%,#4d1428 100%);box-shadow:0 6px 18px #451a2d18}.board:after{content:"";position:absolute;inset:12px;border:1px solid #d4aa704d;border-radius:7px;pointer-events:none}.board-top,.board-foot{display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1;color:#e9c799;font-size:13px;letter-spacing:.11em}.board-top{padding:28px 30px 0}.board-top span:last-child{letter-spacing:.16em}.board-foot{padding:12px 32px 24px;justify-content:center;gap:14px;font-size:12px}.board canvas{position:absolute;inset:0;width:100%;height:100%;z-index:-1}.stage-body{position:relative;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:4px 24px 8px}.ornament{display:flex;align-items:center;gap:10px;color:#e4bf87;font-size:19px}.ornament:before,.ornament:after{content:"";width:49px;height:1px;background:linear-gradient(90deg,transparent,#dcb67c)}.ornament:after{transform:rotate(180deg)}#blessing{font-size:clamp(48px,5.6vw,88px);font-weight:600;letter-spacing:.13em;padding-left:.13em;line-height:1.28;text-shadow:0 2px 14px #43071955;color:#ffedcd}.prize-line{font-size:clamp(16px,1.3vw,22px);margin:8px 0 16px;letter-spacing:.06em;max-width:100%;overflow-wrap:anywhere}.stage-status{font-size:14px;letter-spacing:.08em;min-height:22px;color:#f1d7b3;margin:9px 0 16px}.gold{border:1px solid #fbe4bc;border-radius:30px;background:linear-gradient(180deg,#fae2b4,#e9bd76);color:#662237;box-shadow:0 4px 13px #3c0c2740;padding:11px 34px;font:700 22px var(--serif);letter-spacing:.13em}.gold span{font:21px Georgia}.ticket{display:inline-grid;place-items:center;min-width:54px;height:63px;margin:0 3px;background:linear-gradient(#ffefd4,#f8dfb7);color:#69283a;border:1px solid #f6deb5;border-radius:7px;box-shadow:0 3px 0 #b48368;font:600 39px/1 Georgia,serif}.results{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:100%}.winner{display:inline-block;font:600 clamp(24px,3vw,46px)/1.2 Georgia,serif;letter-spacing:.08em;color:#602037;background:#ffebc7;border-radius:8px;padding:5px 12px}.winner.only{font-size:clamp(42px,6vw,88px)}#pages{display:flex;gap:12px;align-items:center;margin-bottom:8px}#pages button{background:transparent;border:1px solid #cba37e;color:#fff;border-radius:4px;font-size:20px}
+button.outline,.solid,.text-button{border-radius:8px;padding:9px 15px;font-weight:600}.outline{background:#fffcf6;color:var(--wine);border:1px solid #cbbba6}.solid{background:var(--wine);color:#fff;border:0}.text-button{background:none;border:0;color:var(--wine)}button:hover:enabled{filter:brightness(.95)}main{max-width:1570px;margin:auto;padding:32px 4vw 36px}.heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}.kicker,.over{color:#8c6444;letter-spacing:.13em;font-size:13px;font-weight:700}.kicker{display:flex;align-items:center;gap:10px}.kicker i{height:1px;width:26px;background:#a88454}h1,h2,p{margin:0}h1,h2{font-family:var(--serif)}h1{font-size:clamp(31px,3vw,45px);letter-spacing:.065em;line-height:1.35;margin-top:4px}.layout{display:grid;grid-template-columns:minmax(0,2.45fr) minmax(260px,1fr);gap:22px}.board{position:relative;isolation:isolate;overflow:hidden;min-height:490px;display:flex;flex-direction:column;align-items:stretch;border-radius:15px;color:#fae9c5;background:radial-gradient(ellipse at 51% 39%,#922f43 0%,#781d36 53%,#4d1428 100%);box-shadow:0 6px 18px #451a2d18}.board:after{content:"";position:absolute;inset:12px;border:1px solid #d4aa704d;border-radius:7px;pointer-events:none}.board-top,.board-foot{display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1;color:#e9c799;font-size:13px;letter-spacing:.11em}.board-top{padding:28px 30px 0}.board-top span:last-child{letter-spacing:.16em}.board-foot{padding:12px 32px 24px;justify-content:center;gap:14px;font-size:12px}.board canvas{position:absolute;inset:0;width:100%;height:100%;z-index:-1}.stage-body{position:relative;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:4px 24px 8px}.ornament{display:flex;align-items:center;gap:10px;color:#e4bf87;font-size:19px}.ornament:before,.ornament:after{content:"";width:49px;height:1px;background:linear-gradient(90deg,transparent,#dcb67c)}.ornament:after{transform:rotate(180deg)}#blessing{font-size:clamp(48px,5.6vw,88px);font-weight:600;letter-spacing:.13em;padding-left:.13em;line-height:1.28;text-shadow:0 2px 14px #43071955;color:#ffedcd}.prize-line{font-size:clamp(16px,1.3vw,22px);margin:8px 0 16px;letter-spacing:.06em;max-width:100%;overflow-wrap:anywhere}.stage-status{font-size:14px;letter-spacing:.08em;min-height:22px;color:#f1d7b3;margin:9px 0 16px}.gold{border:1px solid #fbe4bc;border-radius:30px;background:linear-gradient(180deg,#fae2b4,#e9bd76);color:#662237;box-shadow:0 4px 13px #3c0c2740;padding:11px 34px;font:700 22px var(--serif);letter-spacing:.13em}.gold span{font:21px Georgia}.ticket{display:inline-grid;place-items:center;min-width:54px;height:63px;margin:0 3px;background:linear-gradient(#ffefd4,#f8dfb7);color:#69283a;border:1px solid #f6deb5;border-radius:7px;box-shadow:0 3px 0 #b48368;font:600 39px/1 Georgia,serif}.results{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:100%}.winner{display:inline-block;font:600 clamp(24px,3vw,46px)/1.2 Georgia,serif;letter-spacing:.08em;color:#602037;background:#ffebc7;border-radius:8px;padding:5px 12px}.winner.only{font-size:clamp(42px,6vw,88px)}
 .catalog,.control,.paper{border:1px solid var(--line);background:#fffdf8;border-radius:13px}.catalog{display:flex;flex-direction:column;min-height:0;overflow:hidden}.catalog-head{position:relative;padding:23px 22px 16px;border-bottom:1px solid var(--line)}.over{font:700 11px/1.4 Georgia,serif;letter-spacing:.18em}.catalog h2,.paper h2{font-size:26px;letter-spacing:.07em;margin:3px 0}.total{position:absolute;right:19px;bottom:22px;padding:2px 9px;border:1px solid var(--line);border-radius:20px;color:var(--muted);font-size:13px}#prizes{height:0;flex:1;overflow:auto;scrollbar-width:thin;scrollbar-color:#cbbda9 transparent}.item{display:grid;grid-template-columns:38px 1fr;gap:12px;align-items:center;width:100%;text-align:left;padding:15px 16px;background:transparent;border:0;border-bottom:1px solid #eae4d9;color:var(--ink)}.item.current{background:#faefed;box-shadow:inset 3px 0 var(--wine)}.item .index{border-radius:50%;width:34px;height:34px;display:grid;place-items:center;font:italic 17px Georgia,serif;background:#f5efe4;color:#846b4e}.item.current .index{color:#fff5dd;background:var(--wine)}.item strong,.item small{display:block}.item strong{font-size:16px}.item small{font-size:13px;color:#77685f;margin-top:4px}.control{display:flex;align-items:center;gap:22px;padding:18px 22px;margin-top:17px}.control>div{margin-right:auto}.control .label{display:block;color:var(--muted);font-size:13px;margin-bottom:3px}.control input{width:78px;margin-left:5px}.control>span,.paper p,.clear p{color:var(--muted);font-size:15px}.forms{display:grid;grid-template-columns:minmax(250px,.85fr) minmax(360px,1.15fr);gap:20px;align-items:start}.paper{padding:24px}.paper p,.clear p{line-height:1.65;margin:8px 0 14px}.paper label{display:block;font-size:15px;font-weight:600;margin:14px 0 6px}.paper input,.paper textarea,.paper select,.control input{border:1px solid #cfc3b1;padding:9px;color:var(--ink);background:white;border-radius:6px}.paper input,.paper textarea,.paper select{width:100%;margin:5px 0}.paper textarea{resize:vertical}.pair{display:flex;gap:12px;align-items:end}.pair>*{flex:1;min-width:0}.generate .outline{margin-bottom:11px}.paper .solid{margin-top:12px}.record{padding:14px 0;border-top:1px solid var(--line)}.record strong,.record small,.record div{display:block}.record small{margin:4px 0;color:var(--muted)}.record div{word-break:break-word;font-variant-numeric:tabular-nums;color:var(--wine)}.clear{margin:24px 0;color:var(--muted)}.clear summary{cursor:pointer}#notice{position:fixed;z-index:10;bottom:25px;left:50%;transform:translateX(-50%);max-width:92vw;width:max-content;background:#392b2c;color:#fff;padding:13px 22px;border-radius:8px;box-shadow:0 3px 16px #0003}
-body.projecting{background:#54152a}.projecting .mast,.projecting .heading,.projecting .catalog,.projecting .control,.projecting #draw{display:none}.projecting main{padding:0;max-width:none}.projecting .layout{display:block}.projecting .board{min-height:100vh;min-height:100dvh;border-radius:0}.projecting #blessing{font-size:clamp(64px,9vw,170px)}.projecting .winner{font-size:clamp(36px,5.5vw,110px)}.projecting .winner.only{font-size:clamp(64px,13vw,240px)}.projecting .prize-line{font-size:clamp(24px,3vw,56px)}.projecting .stage-status{font-size:clamp(18px,2vw,34px)}.projecting .ticket{width:9vw;height:12vw;font-size:7vw}.projecting .results{max-width:88vw}.projecting #fullscreen{position:fixed;right:22px;bottom:20px;background:#601a2c;color:#f5d6ae;border:1px solid #b28b69;border-radius:6px;padding:8px 12px}.projecting:fullscreen #fullscreen{display:none}
+body.projecting{background:#54152a}.projecting .mast,.projecting .heading,.projecting .catalog,.projecting .control{display:none}.projecting main{padding:0;max-width:none}.projecting .layout{display:block}.projecting .board{min-height:100vh;min-height:100dvh;border-radius:0}.projecting #blessing{font-size:clamp(64px,9vw,170px)}.projecting .winner{font-size:clamp(36px,5.5vw,110px)}.projecting .winner.only{font-size:clamp(64px,13vw,240px)}.projecting .prize-line{font-size:clamp(24px,3vw,56px)}.projecting .stage-status{font-size:clamp(18px,2vw,34px)}.projecting .ticket{width:9vw;height:12vw;font-size:7vw}.projecting .results{max-width:88vw}.projecting #fullscreen{position:fixed;right:22px;bottom:20px;background:#601a2c;color:#f5d6ae;border:1px solid #b28b69;border-radius:6px;padding:8px 12px}.projecting:fullscreen #fullscreen{display:none}
 @media(max-width:850px){.mast{gap:12px}.mast nav{gap:12px}.layout{grid-template-columns:minmax(0,1.7fr) minmax(220px,1fr)}.control{flex-wrap:wrap;gap:12px}}
 @media(max-width:680px){.mast{flex-wrap:wrap;justify-content:space-between;padding:10px 5vw 0}.mast nav{order:3;width:100%;justify-content:space-around}.brand strong{font-size:15px}.seal{width:36px;height:36px;font-size:32px}.mast .project{font-size:14px}.mast nav button{padding:10px 0}.layout,.forms{grid-template-columns:1fr}.layout{gap:14px}.board{min-height:430px}.catalog{height:310px}main{padding:24px 4vw}.heading{margin-bottom:16px}.control{padding:12px}.paper{padding:18px}.pair{flex-wrap:wrap}.ticket{min-width:39px;height:51px;font-size:30px}.board-top,.board-foot{font-size:11px}.stage-body{padding:8px 14px}.music{font-size:14px}.projecting .board-top{padding:26px 22px}.projecting #fullscreen{bottom:44px}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+
+.settings-column{display:grid;gap:20px}.prize-tools,.logo-tools,.board-brand{display:flex;align-items:center;gap:10px}
+.board-brand{min-width:0}.board-brand [data-brand]{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.board-brand .seal{height:30px;width:30px;font-size:25px}.seal{flex:none;overflow:hidden}
+.seal:has(img){background:#fff;border:0;border-radius:6px}.seal img{width:100%;height:100%;object-fit:contain}
+body[data-palette="jade"]{--wine:#20594b}body[data-palette="jade"] .board{background:radial-gradient(ellipse at 50% 35%,#366c58,#12392f)}
+body[data-palette="indigo"]{--wine:#373e74}body[data-palette="indigo"] .board{background:radial-gradient(ellipse at 50% 35%,#4e578b,#202747)}
+:fullscreen .projecting #fullscreen{display:none}
+.many-winners .board{box-sizing:border-box;height:clamp(320px,calc(100dvh - 248px),820px);min-height:0}
+.many-winners .stage-body{min-height:0;gap:4px;padding:4px 20px 14px}
+.many-winners .ornament,.many-winners #blessing,.many-winners .board-foot{display:none}
+.many-winners .board-top{padding:17px 24px 0}.many-winners .prize-line{margin:0;font-size:clamp(14px,1.6vw,26px)}
+.many-winners .stage-status{margin:1px;min-height:0;font-size:14px}.many-winners .gold{padding:5px 24px;font-size:18px}
+.number-grid{display:grid;flex:1 1 0;min-height:0;align-self:stretch;gap:1px}
+.number-grid .winner,.projecting .number-grid .winner{display:grid;place-items:center;padding:0;border-radius:2px;line-height:1;font-family:Consolas,"Courier New",monospace;font-size:inherit;letter-spacing:0;font-weight:700;min-width:0;min-height:0;white-space:nowrap}
+.projecting.many-winners .board{height:100dvh;min-height:0}.projecting.many-winners .stage-body{padding:6px 2vw 18px}
+.projecting.many-winners .prize-line{font-size:clamp(18px,2.5vw,40px)}
+.projecting #draw{display:inline-flex;gap:.35em;align-items:center;justify-content:center}
+.history-search{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap}
+.history-search input{flex:1 1 14rem;min-width:0}
+.record .record-numbers{display:flex;flex-wrap:wrap;gap:.2em .65em;font-size:2rem;line-height:1.3}
+.record-numbers span{white-space:nowrap}
 </style>
 </head><body>
-<header class="mast"><div class="brand"><span class="seal" aria-hidden="true">❀</span><div><strong>國際佛光會中華總會</strong><small>2026 會員大會</small></div></div>
+<header class="mast"><div class="brand"><span class="seal" data-logo aria-hidden="true">❀</span><div><strong data-brand>國際佛光會中華總會</strong><small data-event>2026 會員大會</small></div></div>
 <nav aria-label="主導覽"><button data-view="stage" class="active">抽獎舞台</button><button data-view="settings">活動設定</button><button data-view="history">中獎紀錄</button></nav>
 <button class="outline project" id="project"><span aria-hidden="true">▣</span> 開啟投影</button></header>
 <main>
 <section id="stage">
-<div class="heading"><div><div class="kicker"><i></i> 2026 年度會員大會</div><h1>大會摸彩</h1></div><button class="outline music" id="music" aria-pressed="false">♫　背景音樂：關</button></div>
-<div class="layout"><article class="board"><div class="board-top"><span>會員大會摸彩</span><span id="round"></span></div>
+<div class="heading"><div><div class="kicker"><i></i> <span data-event>2026 會員大會</span></div><h1>大會摸彩</h1></div><button class="outline music" id="music" aria-pressed="false">♫　背景音樂：關</button></div>
+<div class="layout"><article class="board"><div class="board-top"><div class="board-brand"><span class="seal" data-logo aria-hidden="true">❀</span><span data-brand>國際佛光會中華總會</span></div><span id="round"></span></div>
 <canvas id="art" aria-hidden="true"></canvas>
 <div class="stage-body"><div class="ornament" aria-hidden="true">✧</div><h2 id="blessing">千喜萬福</h2><div class="prize-line" id="onPrize"></div>
 <div id="numbers" aria-live="polite"></div><div class="stage-status" id="stageStatus"></div>
-<div id="pages" hidden><button id="prev" aria-label="上一頁">‹</button><span id="pageText"></span><button id="next" aria-label="下一頁">›</button></div>
 <button class="gold" id="draw"><span aria-hidden="true">✧</span> 千喜萬福</button></div>
-<div class="board-foot"><span>國際佛光會中華總會</span><span>✦</span><span>2026 會員大會</span></div></article>
-<aside class="catalog"><div class="catalog-head"><div class="over">PRIZE LIST</div><h2>摸彩獎項</h2><span class="total">15 項</span></div><div id="prizes" role="group" aria-label="選擇本輪獎項"></div></aside></div>
+<div class="board-foot"><span data-brand>國際佛光會中華總會</span><span>✦</span><span data-event>2026 會員大會</span></div></article>
+<aside class="catalog"><div class="catalog-head"><div class="over">PRIZE LIST</div><h2>摸彩獎項</h2><span class="total" id="total">15 項</span></div><div id="prizes" role="group" aria-label="選擇本輪獎項"></div></aside></div>
 <div class="control"><div><span class="label">本輪獎項</span><strong id="current"></strong></div><label>本輪名額 <input type="number" id="batch" min="1" max="100000" value="1"></label><span id="balance"></span><button class="text-button" id="editPrize">設定本獎項</button></div>
 </section>
 <section id="settings" hidden><div class="heading"><div><div class="kicker"><i></i> 工作人員後台</div><h1>活動設定</h1></div></div>
-<div class="forms"><form id="poolForm" class="paper"><h2>參加摸彩號碼</h2><p>輸入實際發出的摸彩券號碼，可混用區間及個別號碼。例如 1-300, 305, 310。</p><label for="pool">有效號碼</label><textarea id="pool" rows="4" placeholder="請輸入本次實際參加的號碼"></textarea><p id="poolCount"></p><button class="solid">儲存號碼池</button></form>
-<form id="prizeForm" class="paper"><h2>獎項與抽法</h2><label for="pick">選擇編輯的獎項</label><select id="pick"></select>
+<div class="forms"><div class="settings-column"><form class="paper" id="brandForm"><h2>系統主題與 Logo</h2>
+<label>左上角主標題<input id="brandTitle" required maxlength="60"></label>
+<label>活動名稱<input id="brandEvent" required maxlength="60"></label>
+<label>舞台色系<select id="palette"><option value="plum">典雅棗紅</option><option value="jade">翡翠青綠</option><option value="indigo">深靛藍</option></select></label>
+<label>左上角 Logo<input id="logoFile" type="file" accept="image/png,image/jpeg,image/webp"></label>
+<div class="logo-tools"><span class="seal" id="logoPreview" aria-label="Logo 預覽">❀</span><button type="button" class="outline" id="restoreLogo">使用預設圖樣</button></div>
+<button class="solid">儲存系統主題</button></form><form id="poolForm" class="paper"><h2>參加摸彩號碼</h2><p>輸入實際發出的摸彩券號碼，可混用區間及個別號碼。例如 1-300, 305, 310。</p><label for="pool">有效號碼</label><textarea id="pool" rows="4" placeholder="請輸入本次實際參加的號碼"></textarea><p id="poolCount"></p><button class="solid">儲存號碼池</button></form></div>
+<form id="prizeForm" class="paper"><h2>獎項與抽法</h2><label for="pick">選擇編輯的獎項</label><select id="pick"></select><div class="prize-tools"><button type="button" class="outline" id="addPrize">新增獎項</button><button type="button" class="text-button" id="deletePrize">刪除此獎項</button></div>
 <div class="pair"><label>獎品名稱<input id="prizeName" required maxlength="100"></label><label>贊助者<input id="sponsor" required maxlength="50"></label></div>
 <label>總名額（填 0 表示待確認）<input id="quantity" type="number" min="0" max="100000" required></label><p id="note"></p>
-<label>抽獎方式<select id="mode"><option value="live">系統現場隨機抽出</option><option value="preset">後台預設號碼</option></select></label>
+<label>抽獎方式<select id="mode"><option value="live">系統現場隨機抽出</option><option value="preset">後台預設號碼</option><option value="ending">後台預設規則（依尾數抽獎）</option></select></label>
+<div id="endingRule" hidden><label for="endingDigits">指定摸彩券號碼的末位數字（尾數）</label>
+<input id="endingDigits" type="text" autocomplete="off" aria-describedby="endingHint" placeholder="例如 1、5、0">
+<p id="endingHint">可填 0 至 9。若填 1、5、0，系統會依本輪名額，從尾數為 1、5 或 0 的可抽號碼中隨機抽出。</p></div>
 <div id="presets" hidden><label for="queue">尚待開出的號碼（依輸入順序揭曉）</label><textarea rows="3" id="queue"></textarea><div class="pair generate"><label>隨機產生個數<input type="number" min="1" max="100000" value="1" id="generateCount"></label><button type="button" class="outline" id="generate">加入隨機號碼</button></div><p>儲存後即為此獎項預留。切回現場隨機並儲存會釋出剩餘預留號碼。</p></div>
-<button class="solid">儲存獎項設定</button></form></div></section>
-<section id="history" hidden><div class="heading"><div><div class="kicker"><i></i> 2026 年度會員大會</div><h1>中獎紀錄</h1></div><button class="outline" id="export">下載 CSV</button></div>
-<div class="paper"><p id="historyCount"></p><div id="rows"></div></div><details class="clear"><summary>彩排後清除紀錄</summary><p>清除所有中獎紀錄與預設號碼，保留獎項及參加號碼。請先下載留存。</p><button class="outline" id="reset">清除彩排紀錄與預設號碼</button></details></section>
+<button class="solid" id="savePrize">儲存獎項設定</button></form></div></section>
+<section id="history" hidden><div class="heading"><div><div class="kicker"><i></i> <span data-event>2026 會員大會</span></div><h1>中獎紀錄</h1></div><button class="outline" id="export">下載 CSV</button></div>
+<div class="paper"><label for="historySearch">搜尋中獎號碼</label><div class="history-search"><input id="historySearch" type="search" inputmode="numeric" autocomplete="off" placeholder="輸入完整券號，例如 0027 或 27"><button class="outline" id="clearSearch" type="button">清除搜尋</button></div>
+<p id="historyCount" role="status"></p><div id="rows"></div></div><details class="clear"><summary>彩排後清除紀錄</summary><p>清除所有中獎紀錄與預設號碼，保留獎項及參加號碼。請先下載留存。</p><button class="outline" id="reset">清除彩排紀錄與預設號碼</button></details></section>
 </main><button id="fullscreen" hidden>全螢幕投影</button><div role="status" id="notice" hidden></div>
 <script>/* 會員大會抽獎規則。抽獎及預留號碼共用同一個可用號碼池。 */
 "use strict";
@@ -62,8 +93,9 @@ const Lottery = (() => {
     ["黃敏惠","全聯禮券",0,"份","總額 30,000 元"],
     ["朱唐妹","海能量水果清潔液＋環境清潔液禮盒",30,"份",""]
   ];
+  const defaultBrand={title:"國際佛光會中華總會",event:"2026 會員大會",logo:"",palette:"plum"};
   function initial() {
-    return {version:1, rev:0, poolText:"", pool:[], selected:0, batch:1, history:[], display:"ready",
+    return {brand:{...defaultBrand},version:1, rev:0, poolText:"", pool:[], selected:0, batch:1, history:[], display:"ready",
       prizes:catalog.map(([sponsor,name,qty,unit,note]) => ({sponsor,name,qty,unit,note,mode:"live",queue:[]}))};
   }
   function requireValue(ok, msg) { if (!ok) throw Error(msg); }
@@ -105,6 +137,12 @@ const Lottery = (() => {
     requireValue(protectedNumbers.every(n=>allowed.has(n)),"號碼池須保留已中獎及已預留的號碼。");
     s.pool=pool;s.poolText=text.trim();s.display="ready";
   }
+  function parseEndings(text) {
+    const parts=String(text??"").normalize("NFKC").trim().split(/[\s,、;]+/u).filter(Boolean);
+    requireValue(parts.length && parts.every(part=>/^\d$/.test(part)),
+      "請填寫 0 至 9 的個位數，多個數字以逗號或空格分隔，例如 1、5、0。");
+    return [...new Set(parts.map(Number))];
+  }
   function configure(s,id,draft) {
     const p=s.prizes[id], awarded=p.qty-remaining(s,id);
     requireValue(draft.name.trim() && draft.sponsor.trim(),"請填寫獎品及贊助者名稱。");
@@ -113,22 +151,72 @@ const Lottery = (() => {
     requireValue(queue.length<=draft.qty-awarded,"預設號碼數量超過剩餘獎項名額。");
     const free=new Set(available(s,id));
     requireValue(queue.every(n=>free.has(n)),"預設號碼須在有效號碼池內，且不能已中獎或被其他獎項預留。");
-    Object.assign(p,{name:draft.name.trim(),sponsor:draft.sponsor.trim(),qty:draft.qty,mode:draft.mode,queue});
+    const endings=draft.mode==="ending"?parseEndings(draft.endingText):[];
+    Object.assign(p,{name:draft.name.trim(),sponsor:draft.sponsor.trim(),qty:draft.qty,mode:draft.mode,queue,endings});
     s.display="ready";
   }
   function draw(s,now=Date.now()) {
     const id=s.selected,p=s.prizes[id],count=s.batch;
+    requireValue(p && !p.deleted,"請先新增並選擇獎項。");
     requireValue(s.pool.length,"請先在「活動設定」儲存參加摸彩的號碼。");
     requireValue(Number.isInteger(count)&&count>=1&&count<=remaining(s,id),"本輪名額超過可抽份數，請調整名額或選擇其他獎項。");
     let numbers;
     if(p.mode==="preset"){
       requireValue(p.queue.length>=count,"本獎項預設號碼不足，請至活動設定補齊或調整本輪名額。");
       numbers=p.queue.splice(0,count);
-    } else { numbers=sample(available(s),count); }
+    } else {
+      let candidates=available(s);
+      if(p.mode==="ending"){
+        const endings=new Set(p.endings);
+        candidates=candidates.filter(n=>endings.has(n%10));
+        requireValue(candidates.length>=count,"符合尾數規則且可抽的號碼剩 "+candidates.length+" 個，本輪需要 "+count+" 個。請調整名額或尾數。");
+      }
+      numbers=sample(candidates,count);
+    }
     const r={id,name:p.name,sponsor:p.sponsor,mode:p.mode,numbers,time:now,round:s.history.length+1};
+    if(p.mode==="ending")r.endings=[...p.endings];
     s.history.push(r);s.display="result";return r;
   }
-  return {initial,parseNumbers,remaining,available,sample,setPool,configure,draw};
+  function activeIds(s) {
+    return s.prizes.flatMap((p,id)=>p.deleted ? [] : [id]);
+  }
+  function savePrize(s,id,draft) {
+    if(id!==-1) {
+      requireValue(s.prizes[id] && !s.prizes[id].deleted,"此獎項已刪除。");
+      configure(s,id,draft);
+      return id;
+    }
+    const next=s.prizes.length;
+    const prizes=[...s.prizes,{qty:0,queue:[],unit:"份",note:""}];
+    configure({...s,prizes},next,draft);
+    s.prizes=prizes;
+    if(s.selected<0)s.selected=next;
+    s.display="ready";
+    return next;
+  }
+  function removePrize(s,id) {
+    const p=s.prizes[id];
+    requireValue(p && !p.deleted,"此獎項已刪除。");
+    // Keep the historical index stable, including after new prizes are added.
+    p.deleted=true;
+    p.queue=[];
+    if(s.selected===id) {
+      s.selected=activeIds(s)[0]??-1;
+      s.batch=1;
+    }
+    s.display="ready";
+  }
+  function drawRound(s,rev,count,now=Date.now()) {
+    requireValue(s.rev===rev,"場次已更新，請確認目前獎項後再開獎。");
+    requireValue(Number.isSafeInteger(count)&&count>0,"請在主控台填寫本輪名額。");
+    const next={...s,batch:count};
+    const result=draw(next,now);
+    s.batch=count;
+    s.display=next.display;
+    return result;
+  }
+  return {defaultBrand,initial,parseNumbers,remaining,available,sample,setPool,configure,draw,
+    activeIds,savePrize,removePrize,drawRound};
 })();
 if (typeof module!=="undefined") module.exports=Lottery;
 </script><script>"use strict";
@@ -137,13 +225,15 @@ const KEY="blia.assembly.2026.lottery.v1";
 const projection=new URLSearchParams(location.search).has("stage");
 const format=n=>String(n).padStart(4,"0");
 const el=(tag,cls,t)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(t!==undefined)e.textContent=t;return e;};
-let state,view="stage",editId=0,editRev=0,noticeTimer,animTimer,pageTimer,page=0,pending=false;
+let state,view="stage",editId=0,editRev=0,noticeTimer,animTimer,pending=false;
 let sound,melody,voiceIndex=0,projector=null;
+let logoDraft="",logoLoading=false,logoSerial=0,stageSending=false,stageTimeout;
+const targetOrigin=location.protocol==="file:"?"*":location.origin;
 function sendStage(){
   if(!projector||projector.closed)return;
   const p=state.prizes[state.selected],last=state.history.at(-1);
-  const snapshot={selected:0,batch:state.batch,display:state.display,pool:state.pool.length?[1]:[],
-    prizes:[{name:p.name,sponsor:p.sponsor,qty:Lottery.remaining(state,state.selected)}],history:[],roundCount:state.history.length};
+  const snapshot={rev:state.rev,brand:state.brand,selected:p?0:-1,batch:Number($("batch").value),display:state.display,pool:state.pool.length?[1]:[],
+    prizes:p?[{name:p.name,sponsor:p.sponsor,qty:Lottery.remaining(state,state.selected)}]:[],history:[],roundCount:state.history.length};
   if(state.display==="result" && last)snapshot.history=[{id:-1,name:last.name,sponsor:last.sponsor,round:last.round,time:last.time,numbers:last.numbers}];
   projector.postMessage({type:"blia-stage-view",snapshot},location.protocol==="file:"?"*":location.origin);
 }
@@ -153,12 +243,13 @@ function read(){
   if(!raw)return Lottery.initial();
   const data=JSON.parse(raw);
   if(data.version!==1||!Array.isArray(data.history)||!Array.isArray(data.prizes))throw Error("活動資料無法讀取，請保留此瀏覽器資料。");
+  data.brand={...Lottery.defaultBrand,...data.brand};
   return data;
 }
 function note(message){const box=$("notice");box.textContent=message;box.hidden=false;clearTimeout(noticeTimer);noticeTimer=setTimeout(()=>box.hidden=true,5500);}
 function busy(s){return s.display==="result" && Date.now()-(s.history.at(-1)?.time??0)<2300;}
-async function change(fn,success){
-  if(projection||pending)return false;
+async function change(fn,success,onError=note){
+  if(pending){onError('操作進行中，請稍候。');return false;}
   pending=true;
   try{
     if(!navigator.locks)throw Error("請使用 Chrome 或 Edge，以活動網址或 localhost 開啟控制台。");
@@ -168,7 +259,7 @@ async function change(fn,success){
       fn(fresh);fresh.rev++;localStorage.setItem(KEY,JSON.stringify(fresh));state=fresh;
     });
     render();if(success)note(success);return true;
-  }catch(e){note(e.message);return false;}finally{pending=false;}
+  }catch(e){onError(e.message);return false;}finally{pending=false;}
 }
 function show(v){
   if(projection)return;
@@ -177,61 +268,165 @@ function show(v){
   if(v==="settings"){editId=state.selected;loadSettings();}
   if(v==="history")historyView();
 }
+function setLogo(node,logo) {
+  if(node.dataset.src===logo)return;
+  node.dataset.src=logo;
+  if(!logo){node.textContent="❀";return;}
+  const img=el("img");img.src=logo;img.alt="";node.replaceChildren(img);
+}
+function renderBrand(){
+  const brand=state.brand??Lottery.defaultBrand;
+  document.body.dataset.palette=brand.palette;
+  document.title=brand.title+"｜"+brand.event+(projection?"｜投影":"｜摸彩");
+  document.querySelectorAll("[data-brand]").forEach(node=>node.textContent=brand.title);
+  document.querySelectorAll("[data-event]").forEach(node=>node.textContent=brand.event);
+  document.querySelectorAll("[data-logo]").forEach(node=>setLogo(node,brand.logo));
+}
+async function chooseLogo(file){
+  if(!file)return;
+  const serial=++logoSerial;
+  logoLoading=true;
+  const url=URL.createObjectURL(file);
+  try{
+    if(!["image/png","image/jpeg","image/webp"].includes(file.type))throw Error("請選擇 PNG、JPG 或 WebP 圖檔。");
+    const img=new Image();img.src=url;await img.decode();
+    const scale=Math.min(1,320/Math.max(img.width,img.height));
+    const canvas=document.createElement("canvas");
+    canvas.width=Math.max(1,Math.round(img.width*scale));canvas.height=Math.max(1,Math.round(img.height*scale));
+    canvas.getContext("2d").drawImage(img,0,0,canvas.width,canvas.height);
+    if(serial===logoSerial){logoDraft=canvas.toDataURL("image/png");setLogo($("logoPreview"),logoDraft);}
+  }catch(err){if(serial===logoSerial)note("無法載入 Logo。"+err.message);}
+  finally{URL.revokeObjectURL(url);if(serial===logoSerial)logoLoading=false;}
+}
 function loadSettings(){
+  const brand=state.brand??Lottery.defaultBrand;
+  $("brandTitle").value=brand.title;$("brandEvent").value=brand.event;$("palette").value=brand.palette;
+  logoSerial++;logoLoading=false;logoDraft=brand.logo;$("logoFile").value="";setLogo($("logoPreview"),logoDraft);
   editRev=state.rev;$("pool").value=state.poolText;
   $("poolCount").textContent="已儲存 "+state.pool.length.toLocaleString()+" 個有效號碼";
-  $("pick").replaceChildren(...state.prizes.map((p,i)=>{const o=el("option","",String(i+1).padStart(2,"0")+"　"+p.sponsor+"｜"+p.name);o.value=i;return o;}));
+  const ids=Lottery.activeIds(state);
+  const options=ids.map((id,i)=>{const p=state.prizes[id];const o=el("option","",String(i+1).padStart(2,"0")+"　"+p.sponsor+"｜"+p.name);o.value=id;return o;});
+  const add=el("option","","＋ 新獎項");add.value=-1;
+  $("pick").replaceChildren(...options,add);
+  if(!ids.includes(editId))editId=-1;
   $("pick").value=editId;loadPrize();
 }
 function loadPrize(){
-  const p=state.prizes[editId];
+  const adding=editId===-1;
+  const p=state.prizes[editId]??{name:"",sponsor:"",qty:1,queue:[],mode:"live",note:""};
+  $("deletePrize").disabled=adding;
+  $("savePrize").textContent=adding?"儲存新獎項":"儲存獎項設定";
   $("prizeName").value=p.name;$("sponsor").value=p.sponsor;$("quantity").value=p.qty;$("mode").value=p.mode;
-  $("queue").value=p.queue.map(format).join(", ");$("generateCount").value=1;$("presets").hidden=p.mode!=="preset";
+  $("queue").value=p.queue.map(format).join(", ");$("generateCount").value=1;
+  $("endingDigits").value=(p.endings??[]).join("、");
+  showModeFields();
   $("note").textContent=[p.note,p.qty?"已配置 "+p.qty+" 個名額":"名額待確認"].filter(Boolean).join(" ｜ ");
 }
 function revision(s){if(s.rev!==editRev)throw Error("另一個操作已更新活動，請重新開啟活動設定後再儲存。");}
 function list(){
   const area=$("prizes");
-  area.replaceChildren(...state.prizes.map((p,i)=>{
+  const ids=Lottery.activeIds(state);
+  $("total").textContent=ids.length+" 項";
+  area.replaceChildren(...ids.map((i,ordinal)=>{
+    const p=state.prizes[i];
     const b=el("button","item"+(i===state.selected?" current":""));b.type="button";b.setAttribute("aria-pressed",String(i===state.selected));
-    b.append(el("span","index",String(i+1).padStart(2,"0")));
+    b.append(el("span","index",String(ordinal+1).padStart(2,"0")));
     const t=el("span");t.append(el("strong","",p.name),el("small","",p.sponsor+" 贊助　·　"+(p.qty?"剩 "+Lottery.remaining(state,i)+" / "+p.qty:"名額待確認")));b.append(t);
     b.onclick=()=>change(s=>{s.selected=i;s.batch=1;s.display="ready";});return b;
   }));
 }
+function fitNumbers(){
+  const grid=$("numbers");
+  if(!grid.classList.contains("number-grid"))return;
+  const w=grid.clientWidth,h=grid.clientHeight,count=grid.childElementCount;
+  if(!w||!h||!count)return;
+  const digits=Number(grid.dataset.digits),gap=1;
+  let best=0,columns=1;
+  for(let cols=1;cols<=count;cols++){
+    const rows=Math.ceil(count/cols);
+    const font=Math.min((w-(cols-1)*gap)/(cols*(digits*.63+.28)),(h-(rows-1)*gap)/(rows*1.2));
+    if(font>best){best=font;columns=cols;}
+    if(font<best && w/cols<(digits*.63+.28)*best)break;
+  }
+  grid.style.gridTemplateColumns="repeat("+columns+", minmax(0, 1fr))";
+  grid.style.gridTemplateRows="repeat("+Math.ceil(count/columns)+", minmax(0, 1fr))";
+  grid.style.fontSize=Math.max(.1,Math.floor(best*10)/10)+"px";
+}
 function resultPage(r){
-  const pages=Math.ceil(r.numbers.length/8);page=(page+pages)%pages;
-  const slice=r.numbers.slice(page*8,page*8+8);
-  $("numbers").className="results";$("numbers").replaceChildren(...slice.map(n=>el("span","winner"+(r.numbers.length===1?" only":""),format(n))));
-  $("pages").hidden=pages<2;$("pageText").textContent=(page+1)+" / "+pages;
+  const dense=r.numbers.length>8;
+  document.body.classList.toggle("many-winners",dense);
+  const grid=$("numbers");
+  grid.className=dense?"number-grid":"results";
+  grid.dataset.digits=String(r.numbers.reduce((max,n)=>Math.max(max,format(n).length),4));
+  const fragment=document.createDocumentFragment();
+  for(const n of r.numbers)fragment.append(el("span","winner"+(r.numbers.length===1?" only":""),format(n)));
+  grid.replaceChildren(fragment);
   $("stageStatus").textContent="恭喜中獎　·　本輪共 "+r.numbers.length+" 位";
+  fitNumbers();
 }
 function tickets(chars){
-  $("numbers").className="";$("numbers").replaceChildren(...Array.from(chars,c=>el("span","ticket",c)));
+  document.body.classList.remove("many-winners");$("numbers").className="";$("numbers").replaceChildren(...Array.from(chars,c=>el("span","ticket",c)));
 }
 function renderStage(){
-  clearInterval(animTimer);clearInterval(pageTimer);page=0;
+  clearInterval(animTimer);
+  renderBrand();
   const p=state.prizes[state.selected],r=state.history.at(-1),result=state.display==="result"&&r;
   $("round").textContent="第 "+String(result?r.round:(state.roundCount??state.history.length)+1).padStart(2,"0")+" 輪";
+  if(!p){
+    $("onPrize").textContent="尚無獎項";$("current").textContent="尚無獎項";$("balance").textContent="";
+    $("draw").disabled=true;$("stageStatus").textContent=projection?"敬候開獎":"請至活動設定新增獎項";
+    tickets("––––");return;
+  }
   $("onPrize").textContent=(result?r.name:p.name)+"　·　"+(result?r.sponsor:p.sponsor)+" 贊助";
   $("current").textContent=p.name;$("balance").textContent=p.qty?"本獎項尚餘 "+Lottery.remaining(state,state.selected)+" 個名額":"名額待確認";
-  $("batch").value=state.batch;$("pages").hidden=true;
+  $("batch").value=state.batch;
   $("draw").disabled=!state.pool.length||Lottery.remaining(state,state.selected)<1;
   if(!result){
-    tickets("––––");$("stageStatus").textContent=!state.pool.length?(projection?"敬候開獎":"請先至活動設定輸入摸彩號碼"):!p.qty?"獎項名額待確認":Lottery.remaining(state,state.selected)===0?"本獎項已抽畢":"準備開獎";return;
+    tickets("––––");$("stageStatus").textContent=!state.pool.length?(projection?"敬候開獎":"請先至活動設定輸入摸彩號碼"):!p.qty?"獎項名額待確認":Lottery.remaining(state,state.selected)===0?"本獎項已抽畢":"準備開獎　·　本輪 "+state.batch+" 位";return;
   }
-  const finish=()=>{clearInterval(animTimer);resultPage(r);$("draw").disabled=Lottery.remaining(state,state.selected)<1;if(r.numbers.length>8)pageTimer=setInterval(()=>{page++;resultPage(r);},7000);};
+  const finish=()=>{clearInterval(animTimer);resultPage(r);$("draw").disabled=Lottery.remaining(state,state.selected)<1;};
   if(!busy(state)){finish();return;}
   $("draw").disabled=true;$("stageStatus").textContent="祝福揭曉中";
   const tick=()=>{if(!busy(state)){finish();return;}tickets(reduced?"✦✦✦✦":String(Math.floor(Math.random()*10000)).padStart(4,"0"));};
   tick();animTimer=setInterval(tick,reduced?300:95);
 }
+function showModeFields(){
+  const mode=$("mode").value;
+  $("presets").hidden=mode!=="preset";
+  $("endingRule").hidden=mode!=="ending";
+}
+function modeLabel(round){
+  if(round.mode==="ending")return "依尾數抽獎（"+round.endings.join("、")+"）";
+  return round.mode==="preset"?"後台預設":"現場隨機";
+}
 function historyView(){
-  const rs=state.history, total=rs.reduce((a,r)=>a+r.numbers.length,0);
-  $("historyCount").textContent=rs.length?"已完成 "+rs.length+" 輪，共 "+total+" 個中獎號碼。":"尚無中獎紀錄。開獎後將依輪次列出獎品與號碼。";
-  $("export").disabled=!rs.length;
-  $("rows").replaceChildren(...rs.slice().reverse().map(r=>{
-    const d=el("article","record");d.append(el("strong","","第 "+r.round+" 輪　"+r.name),el("small","",r.sponsor+" 贊助　·　"+(r.mode==="live"?"現場隨機":"後台預設")+"　·　"+new Date(r.time).toLocaleString("zh-TW",{timeZone:"Asia/Taipei",hour12:false})),el("div","",r.numbers.map(format).join("　")));return d;
+  const query=$("historySearch").value.normalize("NFKC").trim();
+  const searching=query.length>0;
+  const valid=/^\d{1,6}$/.test(query)&&Number(query)>0;
+  const ticket=Number(query);
+  const rounds=state.history;
+  let shown=rounds;
+  if(searching)shown=valid?rounds.filter(r=>r.numbers.includes(ticket)):[];
+  let summary;
+  if(!searching){
+    const total=rounds.reduce((a,r)=>a+r.numbers.length,0);
+    summary=rounds.length?"已完成 "+rounds.length+" 輪，共 "+total+" 個中獎號碼。":"尚無中獎紀錄。";
+  }else if(!valid){
+    summary="請輸入 1 至 999999 的完整券號。";
+  }else{
+    summary=shown.length?"查到 "+format(ticket)+" 的中獎紀錄。":"目前沒有 "+format(ticket)+" 的中獎紀錄。";
+  }
+  $("historyCount").textContent=summary;
+  $("clearSearch").disabled=!searching;
+  $("export").disabled=!rounds.length;
+  $("rows").replaceChildren(...shown.slice().reverse().map(r=>{
+    const record=el("article","record");
+    const when=new Date(r.time).toLocaleString("zh-TW",{timeZone:"Asia/Taipei",hour12:false});
+    const numbers=searching?[ticket]:r.numbers;
+    const group=el("div","record-numbers");
+    for(const n of numbers)group.append(el("span","",format(n)));
+    record.append(el("strong","","第 "+r.round+" 輪　"+r.name),el("small","",r.sponsor+" 贊助　·　"+modeLabel(r)+"　·　"+when),group);
+    return record;
   }));
 }
 function render(){renderStage();if(!projection){list();sendStage();}if(view==="history")historyView();}
@@ -271,7 +466,7 @@ async function toggleMusic(){
 }
 function exportCsv(){
   const rows=[["輪次","獎品","贊助者","摸彩券號碼","抽法","開獎時間（臺北）"]];
-  for(const r of state.history)for(const n of r.numbers)rows.push([r.round,r.name,r.sponsor,format(n),r.mode==="live"?"現場隨機":"後台預設",new Date(r.time).toLocaleString("zh-TW",{timeZone:"Asia/Taipei",hour12:false})]);
+  for(const r of state.history)for(const n of r.numbers)rows.push([r.round,r.name,r.sponsor,format(n),modeLabel(r),new Date(r.time).toLocaleString("zh-TW",{timeZone:"Asia/Taipei",hour12:false})]);
   const cell=value=>{let t=String(value);if(/^[=+@\-\t\r]/.test(t))t="'"+t;return '"'+t.replaceAll('"','""')+'"';};
   const blob=new Blob(["\uFEFF"+rows.map(row=>row.map(cell).join(",")).join("\r\n")],{type:"text/csv;charset=utf-8"});
   const a=el("a");a.href=URL.createObjectURL(blob);a.download="2026會員大會中獎紀錄.csv";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
@@ -285,29 +480,74 @@ function setup(){
     if(event.origin!==location.origin)return;
     if(projection && window.opener && event.source===window.opener && event.data?.type==="blia-stage-view"){
       state=event.data.snapshot;renderStage();
-    }else if(!projection && projector && event.source===projector && event.data?.type==="blia-stage-ready"){sendStage();}
+    }else if(!projection && projector && event.source===projector){
+      if(event.data?.type==="blia-stage-ready")sendStage();
+      if(event.data?.type==="blia-stage-draw"){
+        const {rev,count,request}=event.data;
+        let message="";
+        change(s=>{
+          if(count!==Number($("batch").value))throw Error("本輪名額已更新，請確認後再按開獎。");
+          Lottery.drawRound(s,rev,count);
+        },null,error=>{message=error;note(error);}).then(()=>{
+          sendStage();
+          if(!projector.closed)projector.postMessage({type:"blia-stage-ack",message,request},targetOrigin);
+        });
+      }
+    }else if(projection && event.source===window.opener && event.data?.type==="blia-stage-ack" && event.data.request===stageSending){
+      clearTimeout(stageTimeout);stageSending=false;
+      if(event.data.message)note(event.data.message);
+    }
   });
   if(projection && window.opener)window.opener.postMessage({type:"blia-stage-ready"},location.protocol==="file:"?"*":location.origin);
   $("fullscreen").onclick=()=>document.documentElement.requestFullscreen().catch(()=>note("請使用瀏覽器的全螢幕功能。"));
   $("editPrize").onclick=()=>show("settings");$("music").onclick=()=>toggleMusic().catch(()=>note("無法播放音樂，請檢查瀏覽器音訊權限。"));
-  $("draw").onclick=()=>{const rev=state.rev,count=Number($("batch").value);change(s=>{if(s.rev!==rev)throw Error("活動已更新，請確認目前獎項。");s.batch=count;Lottery.draw(s);});};
-  // The per-round count is committed atomically with the draw.
+  $("batch").oninput=()=>{sendStage();if(state.display==="ready" && state.pool.length && state.selected>=0 && Lottery.remaining(state,state.selected)>0)$("stageStatus").textContent="準備開獎　·　本輪 "+$("batch").value+" 位";};
+  $("draw").onclick=()=>{
+    if(projection && window.opener){
+      if(window.opener.closed){note("請回主控台重新開啟投影。");return;}
+      if(stageSending)return;
+      stageSending=crypto.randomUUID();
+      window.opener.postMessage({type:"blia-stage-draw",request:stageSending,rev:state.rev,count:state.batch},targetOrigin);
+      stageTimeout=setTimeout(()=>{stageSending=false;note("未收到主控台回應，請先核對中獎紀錄。");},5000);
+    }else{
+      const rev=state.rev,count=Number($("batch").value);
+      change(s=>Lottery.drawRound(s,rev,count));
+    }
+  };
+  $("logoFile").onchange=()=>chooseLogo($("logoFile").files[0]);
+  $("restoreLogo").onclick=()=>{logoSerial++;logoLoading=false;logoDraft="";$("logoFile").value="";setLogo($("logoPreview"),"");};
+  $("brandForm").onsubmit=async e=>{
+    e.preventDefault();
+    if(logoLoading){note("Logo 載入中，請稍候再儲存。");return;}
+    const title=$("brandTitle").value.trim(),event=$("brandEvent").value.trim();
+    if(!title||!event){note("請填寫主標題與活動名稱。");return;}
+    const brand={title,event,palette:$("palette").value,logo:logoDraft};
+    if(await change(s=>{revision(s);s.brand=brand;},"已儲存主題與 Logo。"))editRev=state.rev;
+  };
+  $("addPrize").onclick=()=>{editId=-1;$("pick").value=-1;loadPrize();$("prizeName").focus();};
+  $("deletePrize").onclick=async ()=>{
+    const id=editId,p=state.prizes[id];if(!p)return;
+    if(!confirm("刪除「"+p.name+"」？尚未開出的預留號碼將釋出，過往中獎紀錄會保留。"))return;
+    if(await change(s=>{revision(s);Lottery.removePrize(s,id);},"已刪除獎項。")){editId=state.selected;loadSettings();}
+  };
   $("poolForm").onsubmit=async e=>{e.preventDefault();if(await change(s=>{revision(s);Lottery.setPool(s,$("pool").value);},"已儲存參加摸彩號碼。")){editRev=state.rev;$("poolCount").textContent="已儲存 "+state.pool.length.toLocaleString()+" 個有效號碼";}};
   $("pick").onchange=()=>{editId=Number($("pick").value);loadPrize();};
-  $("mode").onchange=()=>$("presets").hidden=$("mode").value!=="preset";
+  $("mode").onchange=showModeFields;
   $("generate").onclick=()=>{try{
     const existing=Lottery.parseNumbers($("queue").value), skip=new Set(existing),n=Number($("generateCount").value),qty=Number($("quantity").value);
-    const awarded=state.prizes[editId].qty-Lottery.remaining(state,editId);
+    const awarded=editId<0?0:state.prizes[editId].qty-Lottery.remaining(state,editId);
     if(existing.length+n>qty-awarded)throw Error("預設個數超過剩餘名額。");
     const added=Lottery.sample(Lottery.available(state,editId).filter(v=>!skip.has(v)),n);
     $("queue").value=[...existing,...added].map(format).join(", ");note("已加入號碼，請按「儲存獎項設定」完成預留。");
   }catch(e){note(e.message);}};
-  $("prizeForm").onsubmit=async e=>{e.preventDefault();if(await change(s=>{revision(s);Lottery.configure(s,editId,{name:$("prizeName").value,sponsor:$("sponsor").value,qty:Number($("quantity").value),mode:$("mode").value,queueText:$("queue").value});},"已儲存獎項設定。"))loadSettings();};
-  $("prev").onclick=()=>{page--;resultPage(state.history.at(-1));};$("next").onclick=()=>{page++;resultPage(state.history.at(-1));};
+  $("prizeForm").onsubmit=async e=>{e.preventDefault();if(await change(s=>{revision(s);editId=Lottery.savePrize(s,editId,{name:$("prizeName").value,sponsor:$("sponsor").value,qty:Number($("quantity").value),mode:$("mode").value,queueText:$("queue").value,endingText:$("endingDigits").value});},"已儲存獎項設定。"))loadSettings();};
+  $("historySearch").oninput=historyView;
+  $("clearSearch").onclick=()=>{$("historySearch").value="";historyView();$("historySearch").focus();};
   $("export").onclick=exportCsv;
   $("reset").onclick=()=>{const rev=state.rev;if(prompt("確定清除全部中獎紀錄與預設號碼？請輸入「清除彩排」確認。")==="清除彩排")change(s=>{if(s.rev!==rev)throw Error("活動已更新，請重新確認再清除。");s.history=[];s.prizes.forEach(p=>p.queue=[]);s.display="ready";s.batch=1;},"已清除彩排紀錄與預設號碼。");};
-  window.addEventListener("storage",e=>{if(e.key===KEY||e.key===null){try{state=read();render();}catch(err){note(err.message);}}});
+  window.addEventListener("storage",e=>{if((e.key===KEY||e.key===null) && !(projection && window.opener)){try{state=read();render();}catch(err){note(err.message);}}});
   window.addEventListener("pageshow",()=>{try{state=read();render();if(projection&&window.opener)window.opener.postMessage({type:"blia-stage-ready"},location.protocol==="file:"?"*":location.origin);}catch(err){note(err.message);}});
+  new ResizeObserver(fitNumbers).observe($("numbers"));
   new ResizeObserver(flowerArt).observe($("art"));render();flowerArt();
 }
 try{setup();}catch(e){$("draw").disabled=true;note("無法載入活動："+e.message);}
