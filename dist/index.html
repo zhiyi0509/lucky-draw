@@ -10,7 +10,8 @@
 <button class="outline project" id="project"><span aria-hidden="true">▣</span> 開啟投影</button></header>
 <main>
 <section id="stage">
-<div class="heading"><div><div class="kicker"><i></i> <span data-event>2026 會員大會</span></div><h1>大會摸彩</h1></div><button class="outline music" id="music" aria-pressed="false">♫　背景音樂：關</button></div>
+<div class="heading"><div><div class="kicker"><i></i> <span data-event>2026 會員大會</span></div><h1>大會摸彩</h1></div>
+<div class="music-controls"><label for="track">開獎配樂</label><select id="track"><option value="festival">歡慶銅管 · 150 BPM</option><option value="dance">電音衝刺 · 160 BPM</option><option value="drums">勝利戰鼓 · 172 BPM</option></select><button class="outline music" id="music" aria-pressed="false">♫　背景音樂：關</button></div></div>
 <div class="layout"><article class="board"><div class="board-top"><div class="board-brand"><span class="seal" data-logo aria-hidden="true">❀</span><span data-brand>國際佛光會中華總會</span></div><span id="round"></span></div>
 <canvas id="art" aria-hidden="true"></canvas>
 <div class="stage-body"><div class="ornament" aria-hidden="true">✧</div><h2 id="blessing">千喜萬福</h2><div class="prize-line" id="onPrize"></div>
@@ -31,9 +32,12 @@
 <form id="prizeForm" class="paper"><h2>獎項與抽法</h2><label for="pick">選擇編輯的獎項</label><select id="pick"></select><div class="prize-tools"><button type="button" class="outline" id="addPrize">新增獎項</button><button type="button" class="text-button" id="deletePrize">刪除此獎項</button></div>
 <div class="pair"><label>獎品名稱<input id="prizeName" required maxlength="100"></label><label>贊助者<input id="sponsor" required maxlength="50"></label></div>
 <label>總名額（填 0 表示待確認）<input id="quantity" type="number" min="0" max="100000" required></label><p id="note"></p>
-<label>抽獎方式<select id="mode"><option value="live">系統現場隨機抽出</option><option value="preset">後台預設號碼</option><option value="ending">後台預設規則（依尾數抽獎）</option></select></label>
-<div id="endingRule" hidden><label for="digitPlace">選擇比對位數</label>
-<select id="digitPlace"><option value="ones">末一碼</option><option value="lastTwo">末兩碼</option></select>
+<fieldset class="draw-modes" id="mode"><legend>抽獎方式</legend>
+<label><input type="radio" name="drawMode" id="liveMode" value="live" checked> 現場隨機抽出</label>
+<label><input type="radio" name="drawMode" id="presetMode" value="preset"> 後台預設號碼</label>
+<label><input type="radio" name="drawMode" id="onesMode" value="ones"> 末一碼</label>
+<label><input type="radio" name="drawMode" id="lastTwoMode" value="lastTwo"> 末兩碼</label>
+</fieldset><div id="endingRule" hidden>
 <label for="endingDigits">指定可中獎的尾數</label>
 <input id="endingDigits" type="text" autocomplete="off" aria-describedby="endingHint" placeholder="例如 1、5、0">
 <p id="endingHint"></p></div>

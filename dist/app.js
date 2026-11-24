@@ -95,11 +95,12 @@ function loadPrize(){
   const p=state.prizes[editId]??{name:"",sponsor:"",qty:1,queue:[],mode:"live",note:""};
   $("deletePrize").disabled=adding;
   $("savePrize").textContent=adding?"儲存新獎項":"儲存獎項設定";
-  $("prizeName").value=p.name;$("sponsor").value=p.sponsor;$("quantity").value=p.qty;$("mode").value=p.mode;
+  $("prizeName").value=p.name;$("sponsor").value=p.sponsor;$("quantity").value=p.qty;
   $("queue").value=p.queue.map(format).join(", ");$("generateCount").value=1;
   const oldTens=p.mode==="ending" && p.digitPlace==="tens";
   $("endingDigits").value=oldTens?"":endingText(p);
-  $("digitPlace").value=oldTens?"lastTwo":(p.digitPlace??"ones");
+  const selected=p.mode==="ending"?(oldTens?"lastTwo":(p.digitPlace??"ones")):p.mode;
+  for(const option of modeOptions)$(option+"Mode").checked=option===selected;
   showModeFields();
   $("note").textContent=[p.note,p.qty?"已配置 "+p.qty+" 個名額":"名額待確認",oldTens?"請重新指定末兩碼並儲存。":""].filter(Boolean).join(" ｜ ");
 }
@@ -172,11 +173,13 @@ function renderStage(){
   const tick=()=>{if(!busy(state)){finish();return;}tickets(reduced?"✦✦✦✦":String(Math.floor(Math.random()*10000)).padStart(4,"0"));};
   tick();animTimer=setInterval(tick,reduced?300:95);
 }
+const modeOptions=["live","preset","ones","lastTwo"];
+function selectedMode(){return modeOptions.find(option=>$(option+"Mode").checked)??"live";}
 function showModeFields(){
-  const mode=$("mode").value;
+  const mode=selectedMode();
   $("presets").hidden=mode!=="preset";
-  $("endingRule").hidden=mode!=="ending";
-  const two=$("digitPlace").value==="lastTwo";
+  const two=mode==="lastTwo";
+  $("endingRule").hidden=mode!=="ones"&&!two;
   $("endingDigits").placeholder=two?"例如 07、89":"例如 1、5、0";
   $("endingHint").textContent=two?"請填 00 至 99。指定 89 時，0089、1789 都符合；多組尾數可用逗號分隔。":"請填 0 至 9。指定 9 時，1789 符合；多個數字可用逗號分隔。";
 }
@@ -245,9 +248,18 @@ function flowerArt(){
     ctx.fillStyle="rgba(250,214,151,"+(i%3===0?.38:.2)+")";ctx.beginPath();ctx.arc(x,y,i%6===0?1.4:.75,0,Math.PI*2);ctx.fill();
   }
 }
-function createScore(ctx){
+const scores={
+  festival:{bpm:150,roots:[53,58,50,48],lead:[72,76,77,81,79,77,84],chords:[0,4,7],
+    phrase:[0,null,1,2,null,3,4,null,5,null,4,2,6,null,3,4],kick:[0,6,8,14],snare:[4,12],fanfare:[77,81,84,89]},
+  dance:{bpm:160,roots:[50,46,53,48],lead:[74,77,81,84,86,89],
+    phrase:[0,2,3,2,1,2,4,2,0,2,3,5,4,2,1,2],kick:[0,4,8,12],snare:[4,12],fanfare:[74,81,86,93]},
+  drums:{bpm:172,roots:[48,48,46,43],lead:[67,70,72,75,79],
+    phrase:[0,null,null,1,2,null,2,null,0,null,3,null,4,3,null,2],kick:[0,3,8,10,14],snare:[4,7,12,15],fanfare:[72,79,84,87]}
+};
+function createScore(ctx,track){
+  const score=scores[track]??scores.festival;
   const output=ctx.createGain();
-  output.gain.value=.62;output.connect(ctx.destination);
+  output.gain.value=.64;output.connect(ctx.destination);
   const noise=ctx.createBuffer(1,Math.ceil(ctx.sampleRate*.22),ctx.sampleRate);
   const samples=noise.getChannelData(0);
   for(let i=0;i<samples.length;i++)samples[i]=Math.random()*2-1;
@@ -276,20 +288,45 @@ function createScore(ctx){
     osc.frequency.setValueAtTime(135,time);osc.frequency.exponentialRampToValueAtTime(46,time+.14);
     voice(osc,time,.18,.28);
   }
-
-  // Eight eighth notes per bar, with a four-bar bass progression.
-  const eighth=60/144/2,roots=[50,46,53,48],riff=[0,7,12,7,3,7,15,12];
+  function tom(time,hz){
+    const osc=ctx.createOscillator();osc.type="triangle";
+    osc.frequency.setValueAtTime(hz*1.8,time);osc.frequency.exponentialRampToValueAtTime(hz,time+.10);
+    voice(osc,time,.21,.32);
+  }
+  function brass(time,note,length,level){
+    const osc=ctx.createOscillator(),filter=ctx.createBiquadFilter();
+    osc.type="sawtooth";osc.frequency.value=440*2**((note-69)/12);
+    filter.type="lowpass";filter.frequency.setValueAtTime(2600,time);
+    filter.frequency.exponentialRampToValueAtTime(1200,time+length);
+    voice(osc,time,length,level,filter);
+  }
+  const sixteenth=60/score.bpm/4;
+  function measure(time,step){
+    const beat=step%16,bar=Math.floor(step/16)%4,root=score.roots[bar];
+    if(score.kick.includes(beat))kick(time);
+    if(score.snare.includes(beat))drum(time,.22);
+    if(beat%2===0)drum(time,beat%4===2?.09:.05,true);
+    if(beat%4===0||beat===10)tone(time,root-12,.19,.24);
+    const degree=score.phrase[beat];
+    if(degree!==null){
+      const pitch=score.lead[degree]+(bar===3?-2:0);
+      if(track==="festival")brass(time,pitch,.13,.12);
+      else tone(time,pitch,sixteenth*.88,.105,track==="dance"?"square":"sawtooth");
+    }
+    if(track==="festival"&&[2,6,11,14].includes(beat)){
+      for(const interval of score.chords)brass(time,root+interval,.14,.065);
+    }else if(track==="dance"&&beat%4===2){
+      tone(time,root+7,.14,.14,"sawtooth");
+    }else if(track==="drums"&&[0,3,5,8,10,13,14].includes(beat)){
+      tom(time,[88,116,147][beat%3]);
+    }
+  }
   let step=0,next=ctx.currentTime+.025;
   function pump(){
     next=Math.max(next,ctx.currentTime);
     while(next<ctx.currentTime+.15){
-      const beat=step%8,root=roots[Math.floor(step/8)%4];
-      if(beat===0||beat===4)kick(next);
-      if(beat===2||beat===6)drum(next,.13);
-      drum(next,beat%2?.05:.035,true);
-      if(beat%2===0)tone(next,root-12,.21,.17);
-      tone(next,root+riff[beat],.14,beat%2?.08:.105);
-      next+=eighth;step++;
+      measure(next,step);
+      next+=sixteenth;step++;
     }
   }
   function drawCue(reveal){
@@ -298,18 +335,23 @@ function createScore(ctx){
     for(let t=0;t<2.26;t+=t<.8?.19:t<1.6?.115:.065){
       if(start+t>=ctx.currentTime)drum(start+t,.11+.085*t/2.3);
     }
-    for(const [i,note] of [62,65,69,74].entries()){
-      const time=start+.4+i*.43;
-      if(time>=ctx.currentTime)tone(time,note,.24,.13);
+    for(let i=0;i<12;i++){
+      const time=start+i*(2.3/12);
+      if(time<ctx.currentTime)continue;
+      const note=score.fanfare[i%4]-12+Math.floor(i/4)*2;
+      if(track==="drums")tom(time,85+i*9);
+      else if(track==="festival")brass(time,note,.14,.16);
+      else tone(time,note,.13,.14,"square");
+      if(i%3===0)kick(time);
     }
     kick(reveal);
-    for(const [i,note] of [74,78,81,86].entries())tone(reveal+i*.10,note,i===3?.68:.23,.17);
-    for(const note of [50,57,66])tone(reveal+.30,note,.8,.095);
+    for(const [i,note] of score.fanfare.entries())brass(reveal+i*.09,note,i===3?.62:.21,.17);
+    for(const interval of [0,4,7])tone(reveal+.27,score.fanfare[0]-12+interval,.7,.10);
     next=reveal+1.05;step=0;
   }
   pump();
   const timer=setInterval(pump,65);
-  return {ctx,drawCue,lastRound:null,stop:async()=>{clearInterval(timer);output.disconnect();await ctx.close();}};
+  return {ctx,drawCue,lastRound:null,disconnect:()=>{clearInterval(timer);output.disconnect();}};
 }
 function playDrawCue(round){
   const id=round.round+"-"+round.time;
@@ -322,16 +364,22 @@ async function toggleMusic(){
   const button=$("music");if(button.disabled)return;
   button.disabled=true;
   try{
-    if(music){const score=music;music=null;await score.stop();}
+    if(music){const score=music;music=null;score.disconnect();await score.ctx.close();}
     else{
       const ctx=new AudioContext();
-      try{await ctx.resume();music=createScore(ctx);}catch(error){await ctx.close();throw error;}
+      try{await ctx.resume();music=createScore(ctx,$("track").value);}catch(error){await ctx.close();throw error;}
       if(busy(state))playDrawCue(state.history.at(-1));
     }
   }finally{
     button.disabled=false;button.textContent="♫　背景音樂："+(music?"開":"關");
     button.setAttribute("aria-pressed",String(!!music));
   }
+}
+function switchTrack(){
+  if(!music)return;
+  const ctx=music.ctx;
+  music.disconnect();music=createScore(ctx,$("track").value);
+  if(busy(state))playDrawCue(state.history.at(-1));
 }
 function exportCsv(){
   const rows=[["輪次","獎品","贊助者","摸彩券號碼","抽法","開獎時間（臺北）"]];
@@ -402,7 +450,7 @@ function setup(){
   $("poolForm").onsubmit=async e=>{e.preventDefault();if(await change(s=>{revision(s);Lottery.setPool(s,$("pool").value);},"已儲存參加摸彩號碼。")){editRev=state.rev;$("poolCount").textContent="已儲存 "+state.pool.length.toLocaleString()+" 個有效號碼";}};
   $("pick").onchange=()=>{editId=Number($("pick").value);loadPrize();};
   $("mode").onchange=showModeFields;
-  $("digitPlace").onchange=showModeFields;
+  $("track").onchange=switchTrack;
   $("generate").onclick=()=>{try{
     const existing=Lottery.parseNumbers($("queue").value), skip=new Set(existing),n=Number($("generateCount").value),qty=Number($("quantity").value);
     const awarded=editId<0?0:state.prizes[editId].qty-Lottery.remaining(state,editId);
@@ -410,7 +458,13 @@ function setup(){
     const added=Lottery.sample(Lottery.available(state,editId).filter(v=>!skip.has(v)),n);
     $("queue").value=[...existing,...added].map(format).join(", ");note("已加入號碼，請按「儲存獎項設定」完成預留。");
   }catch(e){note(e.message);}};
-  $("prizeForm").onsubmit=async e=>{e.preventDefault();if(await change(s=>{revision(s);editId=Lottery.savePrize(s,editId,{name:$("prizeName").value,sponsor:$("sponsor").value,qty:Number($("quantity").value),mode:$("mode").value,queueText:$("queue").value,endingText:$("endingDigits").value,digitPlace:$("digitPlace").value});},"已儲存獎項設定。"))loadSettings();};
+  $("prizeForm").onsubmit=async e=>{
+    e.preventDefault();
+    const option=selectedMode(),ending=option==="ones"||option==="lastTwo";
+    const draft={name:$("prizeName").value,sponsor:$("sponsor").value,qty:Number($("quantity").value),
+      mode:ending?"ending":option,queueText:$("queue").value,endingText:$("endingDigits").value,digitPlace:ending?option:"ones"};
+    if(await change(s=>{revision(s);editId=Lottery.savePrize(s,editId,draft);},"已儲存獎項設定。"))loadSettings();
+  };
   $("historySearch").oninput=historyView;
   $("clearSearch").onclick=()=>{$("historySearch").value="";historyView();$("historySearch").focus();};
   $("export").onclick=exportCsv;
