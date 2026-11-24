@@ -32,9 +32,11 @@
 <div class="pair"><label>獎品名稱<input id="prizeName" required maxlength="100"></label><label>贊助者<input id="sponsor" required maxlength="50"></label></div>
 <label>總名額（填 0 表示待確認）<input id="quantity" type="number" min="0" max="100000" required></label><p id="note"></p>
 <label>抽獎方式<select id="mode"><option value="live">系統現場隨機抽出</option><option value="preset">後台預設號碼</option><option value="ending">後台預設規則（依尾數抽獎）</option></select></label>
-<div id="endingRule" hidden><label for="endingDigits">指定摸彩券號碼的末位數字（尾數）</label>
+<div id="endingRule" hidden><label for="digitPlace">選擇比對位數</label>
+<select id="digitPlace"><option value="ones">末一碼</option><option value="lastTwo">末兩碼</option></select>
+<label for="endingDigits">指定可中獎的尾數</label>
 <input id="endingDigits" type="text" autocomplete="off" aria-describedby="endingHint" placeholder="例如 1、5、0">
-<p id="endingHint">可填 0 至 9。若填 1、5、0，系統會依本輪名額，從尾數為 1、5 或 0 的可抽號碼中隨機抽出。</p></div>
+<p id="endingHint"></p></div>
 <div id="presets" hidden><label for="queue">尚待開出的號碼（依輸入順序揭曉）</label><textarea rows="3" id="queue"></textarea><div class="pair generate"><label>隨機產生個數<input type="number" min="1" max="100000" value="1" id="generateCount"></label><button type="button" class="outline" id="generate">加入隨機號碼</button></div><p>儲存後即為此獎項預留。切回現場隨機並儲存會釋出剩餘預留號碼。</p></div>
 <button class="solid" id="savePrize">儲存獎項設定</button></form></div></section>
 <section id="history" hidden><div class="heading"><div><div class="kicker"><i></i> <span data-event>2026 會員大會</span></div><h1>中獎紀錄</h1></div><button class="outline" id="export">下載 CSV</button></div>

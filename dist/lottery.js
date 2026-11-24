@@ -62,10 +62,12 @@ const Lottery = (() => {
     requireValue(protectedNumbers.every(n=>allowed.has(n)),"號碼池須保留已中獎及已預留的號碼。");
     s.pool=pool;s.poolText=text.trim();s.display="ready";
   }
-  function parseEndings(text) {
+  function parseEndings(text,digitPlace) {
     const parts=String(text??"").normalize("NFKC").trim().split(/[\s,、;]+/u).filter(Boolean);
-    requireValue(parts.length && parts.every(part=>/^\d$/.test(part)),
-      "請填寫 0 至 9 的個位數，多個數字以逗號或空格分隔，例如 1、5、0。");
+    const two=digitPlace==="lastTwo";
+    const pattern=two?/^\d{2}$/:/^\d$/;
+    requireValue(parts.length && parts.every(part=>pattern.test(part)),
+      two?"末兩碼請填 00 至 99，例如 07、89。":"末一碼請填 0 至 9，例如 1、5、0。");
     return [...new Set(parts.map(Number))];
   }
   function configure(s,id,draft) {
@@ -76,8 +78,11 @@ const Lottery = (() => {
     requireValue(queue.length<=draft.qty-awarded,"預設號碼數量超過剩餘獎項名額。");
     const free=new Set(available(s,id));
     requireValue(queue.every(n=>free.has(n)),"預設號碼須在有效號碼池內，且不能已中獎或被其他獎項預留。");
-    const endings=draft.mode==="ending"?parseEndings(draft.endingText):[];
+    const digitPlace=draft.digitPlace??"ones";
+    requireValue(digitPlace==="ones"||digitPlace==="lastTwo","請選擇末一碼或末兩碼。");
+    const endings=draft.mode==="ending"?parseEndings(draft.endingText,digitPlace):[];
     Object.assign(p,{name:draft.name.trim(),sponsor:draft.sponsor.trim(),qty:draft.qty,mode:draft.mode,queue,endings});
+    if(draft.mode==="ending")p.digitPlace=digitPlace;
     s.display="ready";
   }
   function draw(s,now=Date.now()) {
@@ -88,18 +93,27 @@ const Lottery = (() => {
     let numbers;
     if(p.mode==="preset"){
       requireValue(p.queue.length>=count,"本獎項預設號碼不足，請至活動設定補齊或調整本輪名額。");
-      numbers=p.queue.splice(0,count);
+      numbers=p.queue.slice(0,count);
+      const free=new Set(available(s,id));
+      requireValue(new Set(numbers).size===count && numbers.every(n=>free.has(n)),
+        "預設號碼中有重複或已無法抽出的券號，請回活動設定修正。");
+      p.queue.splice(0,count);
     } else {
       let candidates=available(s);
       if(p.mode==="ending"){
         const endings=new Set(p.endings);
-        candidates=candidates.filter(n=>endings.has(n%10));
+        requireValue(p.digitPlace!=="tens","此獎項先前使用十位數規則。請到活動設定填寫要比對的末兩碼，再儲存獎項。");
+        const modulus=p.digitPlace==="lastTwo"?100:10;
+        candidates=candidates.filter(n=>endings.has(n%modulus));
         requireValue(candidates.length>=count,"符合尾數規則且可抽的號碼剩 "+candidates.length+" 個，本輪需要 "+count+" 個。請調整名額或尾數。");
       }
       numbers=sample(candidates,count);
     }
     const r={id,name:p.name,sponsor:p.sponsor,mode:p.mode,numbers,time:now,round:s.history.length+1};
-    if(p.mode==="ending")r.endings=[...p.endings];
+    if(p.mode==="ending"){
+      r.endings=[...p.endings];
+      r.digitPlace=p.digitPlace??"ones";
+    }
     s.history.push(r);s.display="result";return r;
   }
   function activeIds(s) {

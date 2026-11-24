@@ -5,7 +5,7 @@ const projection=new URLSearchParams(location.search).has("stage");
 const format=n=>String(n).padStart(4,"0");
 const el=(tag,cls,t)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(t!==undefined)e.textContent=t;return e;};
 let state,view="stage",editId=0,editRev=0,noticeTimer,animTimer,pending=false;
-let sound,melody,voiceIndex=0,projector=null;
+let music=null,projector=null;
 let logoDraft="",logoLoading=false,logoSerial=0,stageSending=false,stageTimeout;
 const targetOrigin=location.protocol==="file:"?"*":location.origin;
 function sendStage(){
@@ -97,9 +97,11 @@ function loadPrize(){
   $("savePrize").textContent=adding?"儲存新獎項":"儲存獎項設定";
   $("prizeName").value=p.name;$("sponsor").value=p.sponsor;$("quantity").value=p.qty;$("mode").value=p.mode;
   $("queue").value=p.queue.map(format).join(", ");$("generateCount").value=1;
-  $("endingDigits").value=(p.endings??[]).join("、");
+  const oldTens=p.mode==="ending" && p.digitPlace==="tens";
+  $("endingDigits").value=oldTens?"":endingText(p);
+  $("digitPlace").value=oldTens?"lastTwo":(p.digitPlace??"ones");
   showModeFields();
-  $("note").textContent=[p.note,p.qty?"已配置 "+p.qty+" 個名額":"名額待確認"].filter(Boolean).join(" ｜ ");
+  $("note").textContent=[p.note,p.qty?"已配置 "+p.qty+" 個名額":"名額待確認",oldTens?"請重新指定末兩碼並儲存。":""].filter(Boolean).join(" ｜ ");
 }
 function revision(s){if(s.rev!==editRev)throw Error("另一個操作已更新活動，請重新開啟活動設定後再儲存。");}
 function list(){
@@ -165,6 +167,7 @@ function renderStage(){
   }
   const finish=()=>{clearInterval(animTimer);resultPage(r);$("draw").disabled=Lottery.remaining(state,state.selected)<1;};
   if(!busy(state)){finish();return;}
+  if(music)playDrawCue(r);
   $("draw").disabled=true;$("stageStatus").textContent="祝福揭曉中";
   const tick=()=>{if(!busy(state)){finish();return;}tickets(reduced?"✦✦✦✦":String(Math.floor(Math.random()*10000)).padStart(4,"0"));};
   tick();animTimer=setInterval(tick,reduced?300:95);
@@ -173,9 +176,18 @@ function showModeFields(){
   const mode=$("mode").value;
   $("presets").hidden=mode!=="preset";
   $("endingRule").hidden=mode!=="ending";
+  const two=$("digitPlace").value==="lastTwo";
+  $("endingDigits").placeholder=two?"例如 07、89":"例如 1、5、0";
+  $("endingHint").textContent=two?"請填 00 至 99。指定 89 時，0089、1789 都符合；多組尾數可用逗號分隔。":"請填 0 至 9。指定 9 時，1789 符合；多個數字可用逗號分隔。";
+}
+function endingText(rule){
+  return (rule.endings??[]).map(n=>String(n).padStart(rule.digitPlace==="lastTwo"?2:1,"0")).join("、");
 }
 function modeLabel(round){
-  if(round.mode==="ending")return "依尾數抽獎（"+round.endings.join("、")+"）";
+  if(round.mode==="ending"){
+    const place=round.digitPlace==="tens"?"十位數":round.digitPlace==="lastTwo"?"末兩碼":"末一碼";
+    return place+"抽獎（"+endingText(round)+"）";
+  }
   return round.mode==="preset"?"後台預設":"現場隨機";
 }
 function historyView(){
@@ -233,15 +245,93 @@ function flowerArt(){
     ctx.fillStyle="rgba(250,214,151,"+(i%3===0?.38:.2)+")";ctx.beginPath();ctx.arc(x,y,i%6===0?1.4:.75,0,Math.PI*2);ctx.fill();
   }
 }
-async function toggleMusic(){
-  if(melody){clearInterval(melody);melody=null;await sound.suspend();}
-  else{
-    sound??=new AudioContext();await sound.resume();
-    const notes=[62,69,74,78,76,69,66,71,74,81,78,74,69,66,64,69];
-    const play=()=>{const time=sound.currentTime,osc=sound.createOscillator(),gain=sound.createGain();osc.type="sine";osc.frequency.value=440*2**((notes[voiceIndex++%notes.length]-69)/12);gain.gain.setValueAtTime(.0001,time);gain.gain.exponentialRampToValueAtTime(.075,time+.07);gain.gain.exponentialRampToValueAtTime(.0001,time+1.7);osc.connect(gain).connect(sound.destination);osc.start();osc.stop(time+1.75);osc.onended=()=>{osc.disconnect();gain.disconnect();};};
-    play();melody=setInterval(play,540);
+function createScore(ctx){
+  const output=ctx.createGain();
+  output.gain.value=.62;output.connect(ctx.destination);
+  const noise=ctx.createBuffer(1,Math.ceil(ctx.sampleRate*.22),ctx.sampleRate);
+  const samples=noise.getChannelData(0);
+  for(let i=0;i<samples.length;i++)samples[i]=Math.random()*2-1;
+
+  function voice(source,time,length,volume,filter){
+    const env=ctx.createGain();
+    env.gain.setValueAtTime(.0001,time);
+    env.gain.exponentialRampToValueAtTime(volume,time+.006);
+    env.gain.exponentialRampToValueAtTime(.0001,time+length);
+    if(filter){source.connect(filter);filter.connect(env);}else{source.connect(env);}
+    env.connect(output);source.start(time);source.stop(time+length);
+    source.onended=()=>{source.disconnect();env.disconnect();if(filter)filter.disconnect();};
   }
-  $("music").textContent="♫　背景音樂："+(melody?"開":"關");$("music").setAttribute("aria-pressed",String(!!melody));
+  function tone(time,midi,length,volume,type="triangle"){
+    const osc=ctx.createOscillator();osc.type=type;
+    osc.frequency.value=440*2**((midi-69)/12);
+    voice(osc,time,length,volume);
+  }
+  function drum(time,volume,high=false){
+    const hit=ctx.createBufferSource();hit.buffer=noise;
+    const filter=ctx.createBiquadFilter();filter.type="highpass";filter.frequency.value=high?6300:950;
+    voice(hit,time,high?.05:.12,volume,filter);
+  }
+  function kick(time){
+    const osc=ctx.createOscillator();
+    osc.frequency.setValueAtTime(135,time);osc.frequency.exponentialRampToValueAtTime(46,time+.14);
+    voice(osc,time,.18,.28);
+  }
+
+  // Eight eighth notes per bar, with a four-bar bass progression.
+  const eighth=60/144/2,roots=[50,46,53,48],riff=[0,7,12,7,3,7,15,12];
+  let step=0,next=ctx.currentTime+.025;
+  function pump(){
+    next=Math.max(next,ctx.currentTime);
+    while(next<ctx.currentTime+.15){
+      const beat=step%8,root=roots[Math.floor(step/8)%4];
+      if(beat===0||beat===4)kick(next);
+      if(beat===2||beat===6)drum(next,.13);
+      drum(next,beat%2?.05:.035,true);
+      if(beat%2===0)tone(next,root-12,.21,.17);
+      tone(next,root+riff[beat],.14,beat%2?.08:.105);
+      next+=eighth;step++;
+    }
+  }
+  function drawCue(reveal){
+    const start=reveal-2.3;
+    // Shorten the drum spacing as the numbers roll.
+    for(let t=0;t<2.26;t+=t<.8?.19:t<1.6?.115:.065){
+      if(start+t>=ctx.currentTime)drum(start+t,.11+.085*t/2.3);
+    }
+    for(const [i,note] of [62,65,69,74].entries()){
+      const time=start+.4+i*.43;
+      if(time>=ctx.currentTime)tone(time,note,.24,.13);
+    }
+    kick(reveal);
+    for(const [i,note] of [74,78,81,86].entries())tone(reveal+i*.10,note,i===3?.68:.23,.17);
+    for(const note of [50,57,66])tone(reveal+.30,note,.8,.095);
+    next=reveal+1.05;step=0;
+  }
+  pump();
+  const timer=setInterval(pump,65);
+  return {ctx,drawCue,lastRound:null,stop:async()=>{clearInterval(timer);output.disconnect();await ctx.close();}};
+}
+function playDrawCue(round){
+  const id=round.round+"-"+round.time;
+  if(music.lastRound===id)return;
+  music.lastRound=id;
+  const remaining=Math.max(.015,(round.time+2300-Date.now())/1000);
+  music.drawCue(music.ctx.currentTime+remaining);
+}
+async function toggleMusic(){
+  const button=$("music");if(button.disabled)return;
+  button.disabled=true;
+  try{
+    if(music){const score=music;music=null;await score.stop();}
+    else{
+      const ctx=new AudioContext();
+      try{await ctx.resume();music=createScore(ctx);}catch(error){await ctx.close();throw error;}
+      if(busy(state))playDrawCue(state.history.at(-1));
+    }
+  }finally{
+    button.disabled=false;button.textContent="♫　背景音樂："+(music?"開":"關");
+    button.setAttribute("aria-pressed",String(!!music));
+  }
 }
 function exportCsv(){
   const rows=[["輪次","獎品","贊助者","摸彩券號碼","抽法","開獎時間（臺北）"]];
@@ -312,6 +402,7 @@ function setup(){
   $("poolForm").onsubmit=async e=>{e.preventDefault();if(await change(s=>{revision(s);Lottery.setPool(s,$("pool").value);},"已儲存參加摸彩號碼。")){editRev=state.rev;$("poolCount").textContent="已儲存 "+state.pool.length.toLocaleString()+" 個有效號碼";}};
   $("pick").onchange=()=>{editId=Number($("pick").value);loadPrize();};
   $("mode").onchange=showModeFields;
+  $("digitPlace").onchange=showModeFields;
   $("generate").onclick=()=>{try{
     const existing=Lottery.parseNumbers($("queue").value), skip=new Set(existing),n=Number($("generateCount").value),qty=Number($("quantity").value);
     const awarded=editId<0?0:state.prizes[editId].qty-Lottery.remaining(state,editId);
@@ -319,7 +410,7 @@ function setup(){
     const added=Lottery.sample(Lottery.available(state,editId).filter(v=>!skip.has(v)),n);
     $("queue").value=[...existing,...added].map(format).join(", ");note("已加入號碼，請按「儲存獎項設定」完成預留。");
   }catch(e){note(e.message);}};
-  $("prizeForm").onsubmit=async e=>{e.preventDefault();if(await change(s=>{revision(s);editId=Lottery.savePrize(s,editId,{name:$("prizeName").value,sponsor:$("sponsor").value,qty:Number($("quantity").value),mode:$("mode").value,queueText:$("queue").value,endingText:$("endingDigits").value});},"已儲存獎項設定。"))loadSettings();};
+  $("prizeForm").onsubmit=async e=>{e.preventDefault();if(await change(s=>{revision(s);editId=Lottery.savePrize(s,editId,{name:$("prizeName").value,sponsor:$("sponsor").value,qty:Number($("quantity").value),mode:$("mode").value,queueText:$("queue").value,endingText:$("endingDigits").value,digitPlace:$("digitPlace").value});},"已儲存獎項設定。"))loadSettings();};
   $("historySearch").oninput=historyView;
   $("clearSearch").onclick=()=>{$("historySearch").value="";historyView();$("historySearch").focus();};
   $("export").onclick=exportCsv;

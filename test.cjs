@@ -73,3 +73,44 @@ test("尾數條件不足與無效規則均不異動已儲存資料",()=>{
  for(const endingText of ["","10","-1","三",", ,"])assert.throws(()=>L.savePrize(s,0,{...draft,endingText}));
  assert.equal(JSON.stringify(s),before);
 });
+test("四種抽法跨獎項及輪次共用已中獎券號，重載後仍然排除",()=>{
+ const s=L.initial();L.setPool(s,"7,17,27,72,77,88,127");
+ preset(s,1,"77");s.selected=1;assert.deepEqual(L.draw(s).numbers,[77]);
+ const rule={name:"數字獎",sponsor:"大會",qty:10,mode:"ending",endingText:"27",digitPlace:"lastTwo"};
+ L.savePrize(s,0,rule);s.selected=0;s.batch=2;
+ const tens=L.draw(s);assert.deepEqual([...tens.numbers].sort((a,b)=>a-b),[27,127]);
+ const saved=JSON.parse(JSON.stringify(s));
+ L.savePrize(saved,2,{...rule,endingText:"7",digitPlace:"ones"});saved.selected=2;
+ assert.deepEqual([...L.draw(saved).numbers].sort((a,b)=>a-b),[7,17]);
+ saved.selected=3;assert.deepEqual([...L.draw(saved).numbers].sort((a,b)=>a-b),[72,88]);
+ assert.throws(()=>preset(saved,1,"127"));assert.throws(()=>L.draw(saved));
+ const all=saved.history.flatMap(r=>r.numbers);assert.equal(new Set(all).size,all.length);
+ assert.equal(tens.digitPlace,"lastTwo");
+});
+test("末兩碼支援 00、07 及前置零，舊末一碼規則仍可使用",()=>{
+ const s=L.initial();L.setPool(s,"7,17,70,100,107");
+ const draft={name:"尾數獎",sponsor:"大會",qty:10,mode:"ending",endingText:"00、０７",digitPlace:"lastTwo"};
+ L.savePrize(s,0,draft);s.batch=3;
+ assert.deepEqual([...L.draw(s).numbers].sort((a,b)=>a-b),[7,100,107]);
+ delete s.prizes[0].digitPlace;s.prizes[0].endings=[7];s.batch=1;const legacy=L.draw(s);
+ assert.deepEqual(legacy.numbers,[17]);assert.equal(legacy.digitPlace,"ones");
+});
+test("指定 89 完整比對末兩碼；位於開頭或中間的 89 不符合",()=>{
+ const s=L.initial();L.setPool(s,"89,1789,8912,1892,1799,1780,189");
+ const rule={name:"末兩碼",sponsor:"大會",qty:10,mode:"ending",endingText:"89",digitPlace:"lastTwo"};
+ L.savePrize(s,0,rule);s.batch=3;
+ assert.deepEqual(L.draw(s).numbers.sort((a,b)=>a-b),[89,189,1789]);
+ for(const endingText of ["9","089","-1","8,9"])assert.throws(()=>L.savePrize(s,0,{...rule,endingText}));
+ assert.throws(()=>L.draw(s));assert.equal(s.history.length,1);
+});
+test("既有十位數規則須指定末兩碼後才能開獎，舊紀錄保留",()=>{
+ const s=setup();Object.assign(s.prizes[0],{mode:"ending",digitPlace:"tens",endings:[8]});
+ const before=JSON.stringify(s);assert.throws(()=>L.draw(s),/重新|填寫/);assert.equal(JSON.stringify(s),before);
+});
+test("已中獎或同一批重複的舊預設名單不會再開出",()=>{
+ const s=setup();preset(s,1,"7");s.selected=1;L.draw(s);s.selected=0;s.batch=2;
+ for(const queue of [[7,10],[10,10]]){
+   Object.assign(s.prizes[0],{mode:"preset",queue});const before=JSON.stringify(s);
+   assert.throws(()=>L.draw(s),/重複/);assert.equal(JSON.stringify(s),before);
+ }
+});
